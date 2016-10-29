@@ -1,10 +1,10 @@
 % apply convolution to an image
 % parameters:
-%   I           input image
+%   img           input image
 %   K           convolution kernel
 %   pad_mode    padding method: 0.zero 1.clamp 2.mirror
 % output:   J     convoluted image
-function J = convolution(I,K,pad_mode)
+function J = convolution(img,K,pad_mode)
     % check if pad_mode is valid
     if ~(ismember(pad_mode,[0,1,2,'zero','clamp','mirror']))   
         error('pad_mod should be either [zero], [clamp] or [mirror] (or a value in 0..2)')
@@ -15,17 +15,17 @@ function J = convolution(I,K,pad_mode)
     Ky = s(2);
     px = floor(Kx/2);
     py = floor(Ky/2);
-    s = size(I);
+    s = size(img);
     Ix = s(1);
     Iy = s(2);
     % perform padding
     switch(pad_mode)
         case {0, 'zero'}
-            I = [zeros(px,2*py+Iy);zeros(Ix,py),I,zeros(Ix,py);zeros(px,2*py+Iy)];
+            I = [zeros(px,2*py+Iy);zeros(Ix,py),img,zeros(Ix,py);zeros(px,2*py+Iy)];
         case {1, 'clamp'}
-            I = pad_clamp(I,px,py);
+            I = pad_clamp(img,px,py);
         case {2, 'mirror'}
-            I = pad_mirror(I,px,py);
+            I = pad_mirror(img,px,py);
     end
     % if kernel even sized, then expand it by adding zeros
     if mod(Kx,2) == 0
