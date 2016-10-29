@@ -17,7 +17,26 @@ imshow(uint8(convolution(dimg,K,'clamp')));
 figure('Name','mean_conv(mirror)');
 imshow(uint8(convolution(dimg,K,'mirror')));
 %% exercise 2
-
+% show image after applying Gaussian mask with s = 1.0
+figure('Name','gaussian_mask(1.0)');
+tic
+imshow(uint8(convolution(dimg,gaussian(1),'clamp')));
+toc
+% show image after applying Gaussian mask with s = 3.0
+figure('Name','gaussian_mask(3.0)');
+tic
+imshow(uint8(convolution(dimg,gaussian(3),'clamp')));
+toc
+% show image after successively applying horizontal and vertical Gaussian mask with s = 1.0
+figure('Name','successive_gaussian_masks(1.0)');
+tic
+imshow(uint8(convolution(convolution(dimg,horizontal_gaussian(1),'clamp'),vertical_gaussian(1),'clamp')));
+toc
+% show image after successively applying horizontal and vertical Gaussian mask with s = 3.0
+figure('Name','successive_gaussian_masks(3.0)');
+tic
+imshow(uint8(convolution(convolution(dimg,horizontal_gaussian(3),'clamp'),vertical_gaussian(3),'clamp')));
+toc
 %% exercise 3
 
 % calculate and visualize gradient magnitudes and orientations
