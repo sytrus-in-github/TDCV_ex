@@ -5,9 +5,12 @@
 function G = gaussian(s)
     siz = 3*s;
     G = zeros(siz, siz);
+    m = (1+siz)/2;
     for i=1:siz
         for j=1:siz
-            G(i,j) = exp(-((i-siz/2)*(i-siz/2)+(j-siz/2)*(j-siz/2))/(2*s*s))/(2*pi*s*s);
+            G(i,j) = exp(-((i-m)*(i-m)+(j-m)*(j-m))/(2*s*s));
         end
     end
+    s = sum(sum(G));
+    G = G/s;
 end

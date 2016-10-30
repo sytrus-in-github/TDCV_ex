@@ -40,7 +40,7 @@ function J = convolution(img,K,pad_mode)
     J = zeros(Ix,Iy);
     for i=1:Ix
         for j=1:Iy
-            J(i,j) = sum(reshape((I(i:i+2*px,j:j+2*py).*K),[],1));
+            J(i,j) = sum(sum(I(i:i+2*px,j:j+2*py).*K));
         end
     end
 end

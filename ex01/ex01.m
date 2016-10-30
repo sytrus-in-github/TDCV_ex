@@ -18,30 +18,73 @@ figure('Name','mean_conv(mirror)');
 imshow(uint8(convolution(dimg,K,'mirror')));
 %% exercise 2
 % show image after applying Gaussian mask with s = 1.0
+g1 = gaussian(1);
 figure('Name','gaussian_mask(1.0)');
 disp('gaussian_mask(1.0):             ');
 tic
-imshow(uint8(convolution(dimg,gaussian(1),'clamp')));
+out = conv2(dimg,g1);
 toc
+tic
+out = convolution(dimg,g1,'clamp');
+toc
+%imshow(uint8(convolution(dimg,g1,'clamp')));
+imshow(uint8(out));
 % show image after applying Gaussian mask with s = 3.0
+g3 = gaussian(3);
 figure('Name','gaussian_mask(3.0)');
 disp('gaussian_mask(3.0):             ');
-
 tic
-imshow(uint8(convolution(dimg,gaussian(3),'clamp')));
+out = conv2(dimg,g3);
 toc
+tic
+out = convolution(dimg,g3,'clamp');
+toc
+imshow(uint8(out));
 % show image after successively applying horizontal and vertical Gaussian mask with s = 1.0
 figure('Name','successive_gaussian_masks(1.0)');
 disp('successive_gaussian_masks(1.0): ');
+gh1 = horizontal_gaussian(1);
+gv1 = vertical_gaussian(1);
 tic
-imshow(uint8(convolution(convolution(dimg,horizontal_gaussian(1),'clamp'),vertical_gaussian(1),'clamp')));
+out = conv2(conv2(dimg,gh1,'same'),gv1,'same');
 toc
+tic
+out = convolution(convolution(dimg,gh1,'clamp'),gv1,'clamp');
+toc
+imshow(uint8(out));
 % show image after successively applying horizontal and vertical Gaussian mask with s = 3.0
 figure('Name','successive_gaussian_masks(3.0)');
 disp('successive_gaussian_masks(3.0): ');
+gh3 = horizontal_gaussian(3);
+gv3 = vertical_gaussian(3);
 tic
-imshow(uint8(convolution(convolution(dimg,horizontal_gaussian(3),'clamp'),vertical_gaussian(3),'clamp')));
+out = conv2(conv2(dimg,gh3,'same'),gv3,'same');
 toc
+tic
+out = convolution(convolution(dimg,gh3,'clamp'),gv3,'clamp');
+toc
+imshow(uint8(out));
+% One test run:
+% gaussian_mask(1.0):             
+% Elapsed time is 0.007031 seconds.
+% Elapsed time is 1.783926 seconds.
+% gaussian_mask(3.0):             
+% Elapsed time is 0.012088 seconds.
+% Elapsed time is 1.807946 seconds.
+% successive_gaussian_masks(1.0): 
+% Elapsed time is 0.008371 seconds.
+% Elapsed time is 2.629134 seconds.
+% successive_gaussian_masks(3.0): 
+% Elapsed time is 0.011113 seconds.
+% Elapsed time is 2.313589 seconds.
+% The acceleratation of successive 1D gaussian convolution is masked in
+% practice by the additional overhead of applying a second convolution, 
+% which is amplified in the case of our implementation by the usage of for
+% loops, etc. However, even with the implementation given by Matlab (conv2)
+% we see no speed-up for small kernel (3X3 for sigma=1) and only a slight
+% spped-up for the bigger kernel (9X9 for sigma=3), which also shows the
+% effect of the cancellation of the speed-up by the overhead of the 
+% additional convolution.
 %% exercise 3
 
 % calculate and visualize gradient magnitudes and orientations
