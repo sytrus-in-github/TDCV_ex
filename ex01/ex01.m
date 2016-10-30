@@ -109,9 +109,10 @@ imshow(uint8(grad_n));
 figure('Name','gradient orientation');
 imshow(uint8((grad_d+pi)*(255/(2*pi))));
 % apply gaussian smoothing
-G = gaussian(3);
-Dx_ = convolution(G,Dx,'clamp');
-Dy_ = convolution(G,Dy,'clamp');
+hg = horizontal_gaussian(3);
+vg = vertical_gaussian(3);
+Dx_ = convolution(hg,Dx,'clamp');
+Dy_ = convolution(vg,Dy,'clamp');
 dimg_x_ = convolution(dimg,Dx_,'clamp');
 dimg_y_ = convolution(dimg,Dy_,'clamp');
 figure('Name','smoothed gradient x direction');
