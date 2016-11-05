@@ -14,9 +14,9 @@ function out = HarrisResponse(img, sig_d, sig_i, alpha)
     Ixy = Ix.*Iy;
     Iyy = Iy.^2;
     Gi = gaussian(sig_i);
-    Mxx = conv2(Ixx,Gi,'same');
-    Mxy = conv2(Ixy,Gi,'same');
-    Myy = conv2(Iyy,Gi,'same');
+    Mxx = sig_d*sig_d*conv2(Ixx,Gi,'same');
+    Mxy = sig_d*sig_d*conv2(Ixy,Gi,'same');
+    Myy = sig_d*sig_d*conv2(Iyy,Gi,'same');
     % calculate output response
     out = (Mxx.*Myy-Mxy.^2) - alpha*(Mxx+Myy).^2;
 end

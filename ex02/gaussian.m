@@ -3,7 +3,7 @@
 %     s   standard deviation of the Gaussian
 % output: G     Gaussian filter
 function G = gaussian(s)
-    siz = round(3*s);
+    siz = ceil(3*s);
     G = zeros(siz, siz);
     m = (1+siz)/2;
     for i=1:siz
