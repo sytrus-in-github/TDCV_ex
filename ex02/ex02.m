@@ -11,7 +11,8 @@ threshold = 0.15;
 dout = Harris(dimg(:,:,1), sig_d, sig_i, alpha, threshold, true);
 dout = dout*255;
 dout = imdilate(dout,ones(3,3));
-dimg = dimg.*(255-dout)/255;  % necessary, otherwise red points in white region will not show ! (saturation)
+dimg(:,:,2) = dimg(:,:,2).*(255-dout)/255;  % necessary, otherwise red points in white region will not show ! (saturation)
+dimg(:,:,3) = dimg(:,:,3).*(255-dout)/255;
 dimg(:,:,1) = dimg(:,:,1)+dout;
 figure('Name','response');
 imshow(uint8(dimg));
@@ -29,7 +30,8 @@ for i=1:n
     resimg = dimg;
     dout(:,:,i) = dout(:,:,i)*255;
     dout(:,:,i) = imdilate(dout(:,:,i),ones(3,3));
-    resimg = resimg.*(255-dout(:,:,i))/255; % necessary, otherwise red points in white region will not show ! (saturation)
+    resimg(:,:,2) = resimg(:,:,2).*(255-dout(:,:,i))/255; % necessary, otherwise red points in white region will not show ! (saturation)
+    resimg(:,:,3) = resimg(:,:,3).*(255-dout(:,:,i))/255;
     resimg(:,:,1) = resimg(:,:,1)+dout(:,:,i);
     figure('Name',strcat('response : scale ',num2str(i)));
     imshow(uint8(resimg));
