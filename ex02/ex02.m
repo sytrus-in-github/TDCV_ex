@@ -19,20 +19,23 @@ imshow(uint8(dimg));
 
 %% test function Harris multiscale
 dimg = double(img);
-sigma = 1;
+s_init = 1;
+sig_d = 2.5;
+sig_i = 3;
 alpha = 0.04;
 n = 3;
 threshold = 0.15;
-k = 1.5;
-c = 0.8;
-dout = Harris_multiscale(dimg(:,:,1), sigma, alpha, threshold, n, k, c);
-for i=1:n
-    resimg = dimg;
-    dout(:,:,i) = dout(:,:,i)*255;
-    dout(:,:,i) = imdilate(dout(:,:,i),ones(3,3));
-    resimg(:,:,2) = resimg(:,:,2).*(255-dout(:,:,i))/255; % necessary, otherwise red points in white region will not show ! (saturation)
-    resimg(:,:,3) = resimg(:,:,3).*(255-dout(:,:,i))/255;
-    resimg(:,:,1) = resimg(:,:,1)+dout(:,:,i);
-    figure('Name',strcat('response : scale ',num2str(i)));
-    imshow(uint8(resimg));
+k = 4;
+dout = Harris_multiscale(dimg(:,:,1), s_init, sig_d, sig_i, alpha, threshold, n, k);
+for l=1:n
+    for i=1:k
+        resimg = dimg;
+        dout(:,:,i*l) = dout(:,:,i*l)*255;
+        dout(:,:,i*l) = imdilate(dout(:,:,i*l),ones(3,3));
+        resimg(:,:,2) = resimg(:,:,2).*(255-dout(:,:,i*l))/255; % necessary, otherwise red points in white region will not show ! (saturation)
+        resimg(:,:,3) = resimg(:,:,3).*(255-dout(:,:,i*l))/255;
+        resimg(:,:,1) = resimg(:,:,1)+dout(:,:,i*l);
+        figure('Name',strcat(strcat(strcat('response : scale ',num2str(l)),', image '), num2str(i)));
+        imshow(uint8(resimg));
+    end
 end

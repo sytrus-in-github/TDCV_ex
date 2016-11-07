@@ -1,11 +1,11 @@
 % return corners (as boolean matrix) by Harris detector given the response matrix 
-function out = HarrisPoints(res, thres, normalize)
+function out = HarrisPoints(res, thresh, normalize)
     % normalize maximum value to 1 if requested
     if normalize
         res = res/max(max(res));
     end
     % get threshold mask
-    mask_t = res>thres;
+    mask_t = res>thresh;
     % get local maximum masks
     shift_l = [res(:,2:end),res(:,end)];
     shift_r = [res(:,1),res(:,1:end-1)];
