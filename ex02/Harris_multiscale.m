@@ -1,5 +1,5 @@
 % return corners (as boolean matrix) by Harris detector for each scale
-function pts = Harris_multiscale(img, s_init, c, alpha, thresh, n, k)
+function [res,pts] = Harris_multiscale(img, s_init, c, alpha, thresh, n, k)
     % get the original size of the image
     sz = size(img);
     pts = [];
