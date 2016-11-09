@@ -1,65 +1,58 @@
-%% test function Harris
-img = imread('sample2.jpg');
-disp(size(img));
-dimg = double(img);
-figure('Name','original');
-imshow(img);
-sig_d = 2.5;
+%% ex02 a)
+
 sig_i = 3;
-alpha = 0.04;
-threshold = 0.15;
-dout = Harris(dimg(:,:,1), sig_d, sig_i, alpha, threshold, true);
-dout = dout*255;
-dout = imdilate(dout,ones(3,3));
-dimg(:,:,2) = dimg(:,:,2).*(255-dout)/255;  % necessary, otherwise red points in white region will not show ! (saturation)
-dimg(:,:,3) = dimg(:,:,3).*(255-dout)/255;
-dimg(:,:,1) = dimg(:,:,1)+dout;
-figure('Name','response');
-imshow(uint8(dimg));
+sig_d = 0.7*sig_i;
+alpha = 0.06;
+threshold = 20000;
+SHOW_SIGMA = true;
+NO_SHOW = false;
+% drawHarris('test.pgm', sig_d, sig_i, alpha, threshold, NO_SHOW);
+% waitforbuttonpress;
+% drawHarris('sample2.jpg', sig_d, sig_i, alpha, threshold, NO_SHOW);
+% waitforbuttonpress;
+% drawHarris('checkerboard_tunnel.png', sig_d, sig_i, alpha, threshold, NO_SHOW);
+% waitforbuttonpress;
+drawHarris('house.tif', sig_d, sig_i, alpha, threshold, NO_SHOW);
+waitforbuttonpress;
 
-% %% test function Harris multiscale
-% dimg = double(img);
-% s_init = 1.5;
-% alpha = 0.04;
-% n = 5;
-% c = 0.7;
-% threshold = 50000;
-% k = 3;
-% [dres,dout] = Harris_multiscale(dimg(:,:,1), s_init, c, alpha, threshold, n, k);
-% for l=0:n-1
-%     for i=0:k-1
-%         resimg = dimg;
-%         dout(:,:,l*k+i+1) = dout(:,:,l*k+i+1)*255;
-%         dout(:,:,l*k+i+1) = imdilate(dout(:,:,l*k+i+1),[1,1,1;1,0,1;1,1,1]);
-%         resimg(:,:,1) = resimg(:,:,1).*(255-dout(:,:,l*k+i+1))/255;
-%         resimg(:,:,2) = resimg(:,:,2).*(255-dout(:,:,l*k+i+1))/255; % necessary, otherwise red points in white region will not show ! (saturation)
-%         resimg(:,:,3) = resimg(:,:,3).*(255-dout(:,:,l*k+i+1))/255;
-%         resimg(:,:,1) = resimg(:,:,1)+dout(:,:,l*k+i+1);
-%         figure('Name',strcat(strcat(strcat('response : scale ',num2str(l)),', image '), num2str(i)));
-%         imshow(uint8(resimg));
-%     end
-% end
+%% ex02 b) c)
 
-%% test function Harris Laplace
-dimg = double(img);
-thresh_h = 50000;
-thresh_l = 40;
+% parameters from paper
+thresh_h = 1500;
+thresh_l = 10;
 alpha = 0.06;
 c= 0.7;
 s_init = 1.5;
-k = 3;
-n = 17;
-[harris_res,harris_out] = Harris_multiscale(dimg(:,:,1), s_init, c, alpha, thresh_h, n, k);
-laplace_res = HarrisLaplaceResponse( harris_res,  s_init, c, n, k);
-pts = HarrisLaplacePoints( laplace_res, harris_out , thresh_l );
-all_pts = pts(:,:,1);
-for i=2:n*k
-    all_pts = all_pts + pts(:,:,i);
-end
-all_pts = all_pts*255;
-all_pts = imdilate(all_pts,ones(3,3));
-dimg(:,:,2) = dimg(:,:,2).*(255-all_pts)/255;  % necessary, otherwise red points in white region will not show ! (saturation)
-dimg(:,:,3) = dimg(:,:,3).*(255-all_pts)/255;
-dimg(:,:,1) = dimg(:,:,1)+all_pts;
-figure('Name','harris-laplace');
-imshow(uint8(dimg));
+k = 1.2;
+n = 5;
+
+% drawMultiscaleHarris_('test.pgm', s_init, c, 5, k, alpha, thresh_h);
+% waitforbuttonpress;
+% drawHarrisLaplace_('test.pgm', s_init, c, 5, k, alpha, thresh_h, thresh_l);
+% waitforbuttonpress;
+% drawMultiscaleHarris_('sample2.jpg', s_init, c, 5, k, alpha, thresh_h);
+% waitforbuttonpress;
+% drawHarrisLaplace_('sample2.jpg', s_init, c, 5, k, alpha, thresh_h, thresh_l);
+% waitforbuttonpress;
+% drawMultiscaleHarris_('checkerboard_tunnel.png', s_init, c, 5, k, alpha, thresh_h);
+% waitforbuttonpress;
+% drawHarrisLaplace_('checkerboard_tunnel.png', s_init, c, 5, k, alpha, thresh_h, thresh_l);
+% waitforbuttonpress;
+drawMultiscaleHarris_('house.tif', s_init, c, 5, k, alpha, thresh_h);
+waitforbuttonpress;
+drawHarrisLaplace_('house.tif', s_init, c, 5, k, alpha, thresh_h, thresh_l);
+waitforbuttonpress;
+
+%% ex02 d)
+
+thresh_h = 1500;
+thresh_l = 10;
+alpha = 0.06;
+c= 0.7;
+s_init = 1.5;
+k = 1.2;
+
+drawMultiscaleHarris0517_('house.tif', s_init, c, k, alpha, thresh_h);
+waitforbuttonpress;
+drawHarrisLaplace0517_('house.tif', s_init, c, k, alpha, thresh_h, thresh_l);
+waitforbuttonpress;
