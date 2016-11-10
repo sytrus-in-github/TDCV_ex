@@ -6,7 +6,7 @@ function laplace_res = HarrisLaplaceResponse( harris_res,  s_init, c, n, k)
         s = s_init;
         for i=0:k-1
             % get Gaussian derivatives
-            Gd = fspecial('gaussian',round(3*c*s),c*s);
+            Gd = gaussian(c * s);
             Gx = conv2(Gd,Dx);
             Gy = conv2(Gd,Dy);
             % compute second derivatives
