@@ -2,7 +2,7 @@
 % load image
 obj = imread('data/shell.jpg');
 % load scene
-scn = imread('data/test_shell1.jpg');
+scn = imread('data/test_shell2.jpg');
 % resize image
 obj = imresize(obj,size(scn,1)/size(obj,1));
 % compute keypoints and descriptors
@@ -23,7 +23,7 @@ DrawBoundingBox(scn, xa, ya, 4);
 % load image
 obj = imread('data/pot.jpg');
 % load scene
-scn = imread('data/test_pot1.jpg');
+scn = imread('data/test_pot2.jpg');
 % resize images the optimal speed and performance
 obj = imresize(obj,1/8);
 scn = imresize(scn,1/4);
