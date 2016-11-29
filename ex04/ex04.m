@@ -78,11 +78,15 @@ for x = 1:m
                 end
                 ba = 1/(2*s+1)^2 * (irgb(maxy,maxx,color) - irgb(miny,maxx,color) - irgb(maxy,minx,color) + irgb(miny,minx,color));
                 % Compute bb
-                X = y+xb;
-                Y = x+yb;
+                X = x+xb;
+                Y = y+yb;
                 z = zb;
                 color = round(3-z);
-                
+%                 if color == 0
+%                     disp('color null');
+%                     disp(curs);
+%                     disp(tree_id);
+%                 end
 %                 [n,m,~] = size(irgb);
                 minx = int16(X-s);
                 miny = int16(Y-s);
