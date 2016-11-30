@@ -12,7 +12,7 @@ irgb = IntegralImage(rgb);
 [n,m,~] = size(irgb);
 
 heatmap = zeros(n,m);
-% votes = zeros(m,n,2);
+votes = zeros(n,m,2);
 
 forest_cells = struct2cell(forest);
 % Test all pixels and update heatmap and votes
@@ -47,7 +47,6 @@ for x = 1:m
                 z = za;
                 color = round(3-z);
                 
-%                 [n,m,~] = size(irgb);
                 minx = int16(X-s);
                 miny = int16(Y-s);
                 maxx = int16(X+s);
@@ -82,12 +81,6 @@ for x = 1:m
                 Y = y+yb;
                 z = zb;
                 color = round(3-z);
-%                 if color == 0
-%                     disp('color null');
-%                     disp(curs);
-%                     disp(tree_id);
-%                 end
-%                 [n,m,~] = size(irgb);
                 minx = int16(X-s);
                 miny = int16(Y-s);
                 maxx = int16(X+s);
@@ -137,12 +130,39 @@ for x = 1:m
         if X > 0 && Y > 0 && X <= m && Y <= n
             heatmap(Y,X) = heatmap(Y, X) + 1;
         end
-%         votes(x,y,1) = X;
-%         votes(x,y,2) = Y;
+        votes(y,x,1) = X;
+        votes(y,x,2) = Y;
     end
-    toc
 end
+toc
     
 result = mat2gray(heatmap);
 figure('Name', 'Heatmap');
 imshow(result);
+
+% figure('Name', 'Points');
+% imshow(uint8(rgb));
+hold on;
+% draw maximum
+[M,j] = max(heatmap);
+[~,i] = max(M);
+j = j(i);
+plot(i,j,'ro','MarkerSize',5);
+% draw points voting for maximum
+points= zeros(n,m);
+c = 0;
+for x = 1:m
+    for y = 1:n
+        v = votes(y,x,:);
+        vx = v(1);
+        vy = v(2);
+        if all([vx, vy] == [i, j])
+            points(y,x) = 1;
+            plot(x,y,'go','MarkerSize',3);
+            c = c+1;
+        else
+            points(y,x) = 0;
+        end
+    end
+end
+disp(c);
