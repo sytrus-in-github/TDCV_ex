@@ -11,7 +11,8 @@ function H = DLT( x, y )
        An(2*i,7:9) = -yn(i,1)*xn(i,:);
     end
     [~,~,V] = svd(An,'econ');
-    hn = V(:,9);
+    [~,num_eigen] = size(V);
+    hn = V(:,num_eigen);
     Hn = zeros(3,3);
     for i = 1:3
         for j = 1:3
