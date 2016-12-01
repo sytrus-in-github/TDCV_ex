@@ -30,7 +30,7 @@ X2(:,1:2) = f2(1:2,matches(2,:))';
 
 disp(num_points);
 s = 4;
-t = 50;
+t = 30;
 T = 20;
 N = 100;
 p = 0.99;
@@ -41,6 +41,16 @@ H = DLT(X1_inline, X2_inline);
 disp(H);
 T = projective2d(H');
 W = imwarp(img1,T);
+[h1,w1] = size(img1);
+% find cooridnates of the bounding box from the 4 corner
+corners = [1 1 1; 1 w1 1; h1 1 1; h1 w1 1] * H';
+corners_h = [corners(:,1)./corners(:,3), corners(:,2)./corners(:,3)];
+offset = round(min(corners_h))-[1,1];
+
+% draw the overlapping area and use 50% transparence fusion of the corresponding zone
+[h2,w2] = size(img2);
+disp(max(max(W)));
+W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2)) = (W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2))+img2(:,:))/2; 
+% show final result
 figure(3); clf;
-hold on;
 imshow(W);
