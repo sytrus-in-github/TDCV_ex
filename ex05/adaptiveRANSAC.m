@@ -26,7 +26,7 @@ function  [X1_inline, X2_inline]= adaptiveRANSAC(X1, X2, func_trans, func_dist, 
         M = func_trans(X1(indx,:), X2(indx,:));
         % TODO catch error caused by degeneration?
         % get the corresponding consensus set
-        dists = func_dist(M*X1, X2);
+        dists = func_dist(X1*M', X2);
         are_inline = dists < t;
         n_inline = sum(are_inline);
         %update N
