@@ -14,7 +14,6 @@ function  [X1_inline, X2_inline]= naiveRANSAC(X1, X2, func_trans, func_dist, s, 
     end
     % get number of pairs and inliner thrershold
     [num, ~] = size(X1);
-    in_t = round(num * T);
     % initialize consensus set
     X1_inline = [];
     X2_inline = [];
@@ -23,7 +22,7 @@ function  [X1_inline, X2_inline]= naiveRANSAC(X1, X2, func_trans, func_dist, s, 
     trial = 0;
     while trial < N
         % get transformation matrix from random sampling
-        indx = randsample(num, nb_sample);
+        indx = randsample(num, s);
         M = func_trans(X1(indx,:), X2(indx,:));
         % TODO catch error caused by degeneration?
         % get the corresponding consensus set
@@ -37,7 +36,7 @@ function  [X1_inline, X2_inline]= naiveRANSAC(X1, X2, func_trans, func_dist, s, 
             X2_inline = X2(are_inline, :);
         end
         % if we find enough inliner we can stop
-        if n_inline>in_t
+        if n_inline>T
             break
         end
         % increment trial number
