@@ -8,12 +8,12 @@
 % Load images
 img1 = imread('data/scene.pgm');
 img2 = imread('data/box.pgm');
-figure(1); clf;
-imshow(img1);
-axis image off;
-figure(2); clf;
-imshow(img2);
-axis image off;
+% figure(1); clf;
+% imshow(img1);
+% axis image off;
+% figure(2); clf;
+% imshow(img2);
+% axis image off;
 
 % Compute Keypoints and Descriptors
 [ f1, d1, f2, d2 ] = ComputeSIFT(img1, img2);
@@ -23,6 +23,7 @@ axis image off;
 
 % Reorder matched keypoints and homogenize
 [~, num_points] = size(matches);
+disp(num_points);
 X1 = ones(num_points, 3);
 X2 = ones(num_points, 3);
 X1(:,1:2) = f1(1:2,matches(1,:))';
