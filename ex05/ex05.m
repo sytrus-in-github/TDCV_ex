@@ -71,7 +71,7 @@ offset = round(min(corners_h))-[1,1];
 
 % draw the overlapping area and use 50% transparence fusion of the corresponding zone
 [h2,w2] = size(img2);
-W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2)) = (W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2))+img2(:,:))/2; 
+W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2)) = W(1-offset(1):h2-offset(1),1-offset(2):w2-offset(2))*0.5+img2(:,:)*0.5; 
 % show final result
 figure(4); clf;
 imshow(W);
