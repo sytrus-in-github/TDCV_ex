@@ -11,44 +11,39 @@ I0 = getImage(0);
 % get 3D points
 m0 = [f0(1:2,:);ones([1,nbsift])];
 M0 = A\m0;
-disp(size(M0))
-%% exercise 2
-% match SIFT points for all images
-NBIMAGE = 44;
-for i=1:NBIMAGE
-    Ii = getImage(i);
-    [fi,di] = ComputeSIFT(Ii);
-    [matches, scores] = ComputeMatches(d0, di);
-    % Reorder matched keypoints and homogenize
-    [~, nb_matches] = size(matches);
-    X1 = ones(nb_matches, 3);
-    X2 = ones(nb_matches, 3);
-    X1(:,1:2) = f0(1:2,matches(1,:))';
-    X2(:,1:2) = fi(1:2,matches(2,:))';
 
-    s = 5;
-    t = 15;
-    p = 0.99;
-%     T = 20;
-%     N = 100;
-    %[X1_inline, X2_inline] = naiveRANSAC(X1, X2, @DLT, @EuclideanDistance, s, t, T, N);
-    [X1_inline, X2_inline] = adaptiveRANSAC(X1, X2, @DLT, @EuclideanDistance, s, t, p);
-    % draw match
-    [sx, sy, ~] = size(I0);
-    [ox, oy, ~] = size(Ii);
-    canvas = zeros([sx, sy+oy, 3]);
-    canvas(1:sx, 1:sy, :) = I0(:,:,:);
-    canvas(1:ox, sy+1:sy+oy, :) = Ii(:,:,:);
-    figure(1);
-    imshow(uint8(canvas));
-    hold on;
-    [nin,~] = size(X1_inline);
-    for j=1:nin
-        p1 = X1_inline(j,1:2);
-        p2 = X2_inline(j,1:2)+[sy,0];
-        h = line([p2(1);p1(1)], [p2(2);p1(2)]);
-        set(h,'linewidth', 0.1, 'color', 'g');
+% Ransac paramaters
+s = 5;
+t = 15;
+p = 0.99;
+
+param_t = [0,0,0,0,0,0];
+camera_coord = zeros(3,45);
+for index = 1:44
+    disp(index);
+    % Get the image
+    It = getImage(index);
+
+    % extract SIFT interesting points
+    [ft, dt] = ComputeSIFT(It);
+    
+    num_inliers = 0;
+    while num_inliers < 50
+        [m0, mt] = SIFTTracking(f0, d0, ft, dt, s, t, p);
+        [num_inliers, ~] = size(m0);
     end
-    saveas(gcf, strcat('data/img_sequence/match',sprintf('%04d',i), '.jpg'))
-    hold off;
+    
+    % DrawMatches(I0, It, m0, mt, index);
+    M0 = A\m0';
+    
+    fun = @(param)EnergyFunction(param(1),param(2),param(3),param(4),param(5),param(6), A, M0, mt');
+    
+    newparam_t = fminsearch(fun, param_t);
+    param_t = newparam_t;
+    camera_coord(:,index+1) = AnglesToRotation(param_t(1),param_t(2),param_t(3))*[-param_t(4);-param_t(5);-param_t(6)];
+end
+figure;
+plot3(camera_coord(1,:),camera_coord(2,:),camera_coord(3,:));
+for index = 1:45
+   text(camera_coord(1,index), camera_coord(2,index), camera_coord(3,index), int2str(index-1)); 
 end
