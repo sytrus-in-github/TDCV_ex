@@ -1,5 +1,5 @@
 function [xa, ya, xb, yb] = DrawMatches( I0, It, X0, Xt, num_figure)
-figure(num_figure); clf;
+figure(1); clf;
 imagesc(cat(2, I0, It));
 
 xa = X0(:,1)' ;
@@ -10,7 +10,7 @@ yb = Xt(:,2)' ;
 hold on ;
 h = line([xa ; xb], [ya ; yb]) ;
 set(h,'linewidth', 1, 'color', 'b') ;
-
+saveas(gcf, strcat('data/img_sequence/match',sprintf('%04d',num_figure),'.jpg'));
 axis image off;
 end
 

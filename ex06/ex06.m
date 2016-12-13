@@ -12,6 +12,7 @@ I0 = getImage(0);
 m0 = [f0(1:2,:);ones([1,nbsift])];
 M0 = A\m0;
 
+%% exercise 2 and 3
 % Ransac paramaters
 s = 5;
 t = 15;
@@ -33,7 +34,7 @@ for index = 1:44
         [num_inliers, ~] = size(m0);
     end
     
-    % DrawMatches(I0, It, m0, mt, index);
+    %DrawMatches(I0, It, m0, mt, index);
     M0 = A\m0';
     
     fun = @(param)EnergyFunction(param(1),param(2),param(3),param(4),param(5),param(6), A, M0, mt');
@@ -42,7 +43,7 @@ for index = 1:44
     param_t = newparam_t;
     camera_coord(:,index+1) = AnglesToRotation(param_t(1),param_t(2),param_t(3))*[-param_t(4);-param_t(5);-param_t(6)];
 end
-figure;
+figure(2); clf;
 plot3(camera_coord(1,:),camera_coord(2,:),camera_coord(3,:));
 for index = 1:45
    text(camera_coord(1,index), camera_coord(2,index), camera_coord(3,index), int2str(index-1)); 
