@@ -41,7 +41,8 @@ for index = 1:44
     
     newparam_t = fminsearch(fun, param_t);
     param_t = newparam_t;
-    camera_coord(:,index+1) = AnglesToRotation(param_t(1),param_t(2),param_t(3))*[-param_t(4);-param_t(5);-param_t(6)];
+    camera_coord(:,index+1) = AnglesToRotation(param_t(1),param_t(2),param_t(3))'*[-param_t(4);-param_t(5);-param_t(6)];
+    disp(param_t);
 end
 figure(2); clf;
 plot3(camera_coord(1,:),camera_coord(2,:),camera_coord(3,:));
