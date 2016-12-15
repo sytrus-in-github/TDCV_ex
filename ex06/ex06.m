@@ -50,3 +50,4 @@ for index = 1:45
    text(camera_coord(1,index), camera_coord(2,index), camera_coord(3,index), int2str(index-1)); 
 end
 grid on;
+%savefig('data/traj.fig');

@@ -10,7 +10,7 @@ yb = Xt(:,2)' ;
 hold on ;
 h = line([xa ; xb], [ya ; yb]) ;
 set(h,'linewidth', 1, 'color', 'b') ;
-saveas(gcf, strcat('data/img_sequence/match',sprintf('%04d',num_figure),'.jpg'));
 axis image off;
+saveas(gcf, strcat('data/img_sequence/match',sprintf('%04d',num_figure),'.jpg'));
 end
 
