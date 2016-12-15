@@ -59,24 +59,26 @@ classdef fc_layer < layer
 		function [obj, y] = initialize(obj, x)
             % Initialize the layers parameters W, b, dW, db, etc.
             %%% START YOUR CODE HERE %%%
+            [width, height, channels, batch_size] = size(x);
+            num_inputs = width * height * channels;
             % Parameters
-            % obj.W = ...
-			% obj.b = ...
+            obj.W = double(sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(num_inputs, obj.num_filters)-0.5));
+			obj.b = double(zeros(obj.num_filters,1));
 			
             % Gradients
-			% obj.dW = ..
-			% obj.db = double(zeros(obj.num_filters, 1));
+			obj.dW = double(zeros(num_inputs, obj.num_filters));
+			obj.db = double(zeros(obj.num_filters, 1));
 			
             % Update (Useful for RMSProp and AdaM updates)
-			% obj.uW = ...
-			% obj.ub = ...
+			obj.uW = double(zeros(num_inputs, obj.num_filters));
+			obj.ub = double(zeros(obj.num_filters, 1));
             
             % Average (Useful for RMSProp and AdaM updates)
-			% obj.aW = ...
-			% obj.ab = ...
+			obj.aW = mean(obj.W);
+			obj.ab = 0;
 			
             % Output
-			% y = ...
+			y = double(zeros(1, 1, obj.num_filters, batch_size));
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -86,13 +88,19 @@ classdef fc_layer < layer
             % A vectorized implementation can speed up your training.
             % Make use of reshape and repmat to create the tensors
             %%% START YOUR CODE HERE %%%
-            % L = ...
+            % Compute the loss (L)
+            N = norm(obj.W);
+            L = obj.decay/2*N*N;
             
+            %Compute the layers output (y)
+            [width, height, channels, batch_size] = size(x);
+            num_inputs = width * height * channels;
             
-            
-            
-            
-            % y = ...
+            xr = reshape(x, [num_inputs * batch_size, 1]);
+            Wr = repmat(obj.W, batch_size, batch_size);
+            br = repmat(obj.b, batch_size, 1);
+            yr = Wr * xr + br;
+            y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -100,9 +108,19 @@ classdef fc_layer < layer
 		function [obj, dx] = backward(obj, dy, x)
             % Compute the gradients dx,dW and db using dy,x and W
             %%% START YOUR CODE HERE %%%
-            % dx = ...
-            % obj.dW = ...
-            % obj.db = ...
+            % Compute the gradient dx
+            [width, height, channels, batch_size] = size(x);
+            num_inputs = width * height * channels;
+            dyr = reshape(dy, [obj.num_filters * batch_size, 1]);
+            Wr = repmat(obj.W, batch_size, batch_size);
+            br = repmat(obj.b, batch_size, 1);
+            dxr =  Wr\(dyr - br);
+            dx = reshape(dxr, [width, height, channels, batch_size]);
+            
+            % Compute the gradient dW
+            xr = reshape(x, [num_inputs * batch_size, 1]);
+            obj.dWr = - (1 - obj.M) * obj.lr * dyr * xr' + obj.M * obj.dWr;
+            obj.db = - (1 - obj.M) * obj.lr * dyr + obj.M * obj.db;
             %%% END YOUR CODE HERE %%%
 		end
 		
