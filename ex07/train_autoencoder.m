@@ -16,7 +16,7 @@ net = net.initialize(input_size);
 
 %% Load trainings data
 % Download dataset from http://yann.lecun.com/exdb/mnist/
-data = loadMNISTImages('train-images.idx3-ubyte');
+data = loadMNISTImages('data/train-images.idx3-ubyte');
 
 % Shuffle the data
 permutation = randperm(size(data,4));

@@ -22,8 +22,8 @@ net = net.load('trained_classifier.h5');
 
 %% Load training data
 % Download dataset from http://yann.lecun.com/exdb/mnist/
-data = loadMNISTImages('t10k-images-idx3-ubyte');
-label = loadMNISTLabels('t10k-labels-idx1-ubyte');
+data = loadMNISTImages('data/t10k-images-idx3-ubyte');
+label = loadMNISTLabels('data/t10k-labels-idx1-ubyte');
 
 % Store the predictions
 predictions = zeros(size(label));

@@ -17,8 +17,8 @@ net = net.load('trained_autoencoder.h5', [1]);
 
 %% Load trainings data
 % Download dataset from http://yann.lecun.com/exdb/mnist/
-data = loadMNISTImages('train-images.idx3-ubyte');
-label = loadMNISTLabels('train-labels.idx1-ubyte');
+data = loadMNISTImages('data/train-images.idx3-ubyte');
+label = loadMNISTLabels('data/train-labels.idx1-ubyte');
 
 % Shuffle the data and labels
 permutation = randperm(size(data,4));
