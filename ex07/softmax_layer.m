@@ -15,10 +15,9 @@ classdef softmax_layer < layer
 			% For numerical stability it is best to subtract the maximum value
 			% per channel and sample before computing the exponential.
 			%%% START YOUR CODE HERE %%%
-            % L = ...
-            
-            
-            % y = ...
+            L = 0;
+            mx = max(max(x, [], 2), [], 1);
+            y = exp(x-mx) ./ sum(exp(x-mx), 3);
 			%%% END YOUR CODE HERE %%%
 		end
 		
