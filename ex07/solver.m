@@ -106,11 +106,10 @@ classdef solver
             % Compute the L2 loss dy using the network output (y) and
             % the groundtruth labels (y_gt)
             %%% START YOUR CODE HERE %%%
-            % Batch size
-            % L = ...
-            
-        
-            % dy = ...
+            [~, ~, ~, N] = size(y); % Batch size
+            dy = y - y_gt;
+            dy_ = dy(:);
+            L = dy_' * dy_ / (2 * N);
             %%% END YOUR CODE HERE %%%
         end
         
