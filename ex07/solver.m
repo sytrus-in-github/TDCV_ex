@@ -92,12 +92,10 @@ classdef solver
             % To avoid numerical problems is is helpful to add a small
             % number e.g. eps inside the log
             %%% START YOUR CODE HERE %%%
-            
-            % L = ...
-                
-        
-            
-            % dy = ...
+            pt = sum(y.*y_gt, 3);
+            [~, ~, ~, N] = size(y); % Batch size
+            L = - sum(log(pt + eps)) / N;
+            dy = y- y_gt;
             %%% END YOUR CODE HERE %%%
         end
         
