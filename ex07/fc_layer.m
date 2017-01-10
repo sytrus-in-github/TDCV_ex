@@ -65,12 +65,12 @@ classdef fc_layer < layer
             num_inputs = width * height * channels;
             batch_size = x(4);
             % Parameters
-            obj.W = double(sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(obj.num_filters, num_inputs)-0.5));
+            obj.W = double(2*sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(obj.num_filters, num_inputs)-0.5));
 			obj.b = double(zeros(obj.num_filters,1));
 			
             % Gradients
-			obj.dW = double(zeros(obj.num_filters * batch_size, num_inputs * batch_size));
-			obj.db = double(zeros(obj.num_filters * batch_size, 1));
+			obj.dW = double(zeros(obj.num_filters, num_inputs));
+			obj.db = double(zeros(obj.num_filters, 1));
 			
             % Update (Useful for RMSProp and AdaM updates)
 			obj.uW = double(zeros(num_inputs, obj.num_filters));
@@ -81,7 +81,7 @@ classdef fc_layer < layer
 			obj.ab = 0;
 			
             % Output
-			y = [obj.num_filters, 1, 1, batch_size];
+			y = [1, 1, obj.num_filters, batch_size];
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -92,18 +92,19 @@ classdef fc_layer < layer
             % Make use of reshape and repmat to create the tensors
             %%% START YOUR CODE HERE %%%
             % Compute the loss (L)
-            N = norm(obj.W);
-            L = obj.decay/2*N*N;
+            NW = norm(obj.W);
+            Nb = norm(obj.b);
+            L = obj.decay / 2 * (NW * NW + Nb * Nb);
             
             %Compute the layers output (y)
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
             
-            xr = reshape(x, [num_inputs * batch_size, 1]);
-            Wr = repmat(obj.W, batch_size, batch_size);
-            br = repmat(obj.b, batch_size, 1);
-            yr = Wr * xr + br;
-            y = reshape(yr, [obj.num_filters, 1, 1, batch_size]);
+            xr = reshape(x, [num_inputs, batch_size]);
+%             Wr = repmat(obj.W, batch_size, batch_size);
+            br = repmat(obj.b, 1, batch_size);
+            yr = obj.W * xr + br;
+            y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -114,18 +115,15 @@ classdef fc_layer < layer
             % Compute the gradient dx
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
-            dyr = reshape(dy, [obj.num_filters * batch_size, 1]);
-            iWr = repmat(obj.W^(-1), batch_size, batch_size);
-            br = repmat(obj.b, batch_size, 1);
-            dxr =  iWr*(dyr - br);
+%             disp([size(dy), obj.num_filters, batch_size]);
+            dyr = reshape(dy, [obj.num_filters, batch_size]);
+            dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
             
             % Compute the gradient dW
-            xr = reshape(x, [num_inputs * batch_size, 1]);
-            dWr = repmat(obj.W, batch_size, batch_size);
-            dbr = repmat(obj.b, batch_size, 1);
-            obj.dW = - (1 - obj.M) * obj.lr * dyr * xr' + obj.M * obj.dW;
-            obj.db = - (1 - obj.M) * obj.lr * dyr + obj.M * obj.db;
+            xr = reshape(x, [num_inputs, batch_size]);
+            obj.dW = - obj.lr * (dyr * xr' + obj.decay * obj.W) + obj.M * obj.dW;
+            obj.db = - obj.lr * (sum(dyr, 2)+ obj.decay * obj.b) + obj.M * obj.db;
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -136,15 +134,15 @@ classdef fc_layer < layer
             % compute the update, you can use uW,ub and aW,ab to store
             % certain values
             %%% START YOUR CODE HERE %%%
-            [num_outputs, num_inputs] = size(obj.W);
-            dW = reshape(obj.dW, [num_outputs, num_inputs, batch_size]);
-            db = reshape(obj.db, [num_outputs, 1, batch_size]);
+%             [num_outputs, num_inputs] = size(obj.W);
+%             dWr = reshape(obj.dW, [num_outputs, num_inputs, batch_size]);
+%             dbr = reshape(obj.db, [num_outputs, 1, batch_size]);
             
-            adW = mean(dW,3);
-            adb = mean(db,3);
+%             obj.adW = mean(dWr,3);
+%             obj.adb = mean(dbr,3);
             
-            obj.W = obj.W + adW;
-            obj.b = obj.b + adb;
+            obj.W = obj.W + obj.dW;
+            obj.b = obj.b + obj.db;
             %%% END YOUR CODE HERE %%%
 		end
 	end
