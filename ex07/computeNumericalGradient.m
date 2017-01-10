@@ -6,7 +6,6 @@ function numgrad = computeNumericalGradient(F, theta)
   
 % Initialize numgrad with zeros
 numgrad = double(zeros(size(theta)));
-
 EPSILON = 1e-4;
 for i=1:length(numgrad)
     e_i = zeros(size(theta));

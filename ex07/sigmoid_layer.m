@@ -54,7 +54,7 @@ classdef sigmoid_layer < layer
 		function [obj, dx] = backward(obj, dy, x)
             % Compute the gradients dx using dy,x and A_avg
             %%% START YOUR CODE HERE %%%
-            dx = dy * exp(-x) ./ (1+exp(-x)).^2;
+            dx = dy .* exp(-x) ./ (1+exp(-x)).^2;
             %%% END YOUR CODE HERE %%%
         end
 	end

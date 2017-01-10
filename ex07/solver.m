@@ -95,7 +95,7 @@ classdef solver
             pt = sum(y.*y_gt, 3);
             [~, ~, ~, N] = size(y); % Batch size
             L = - sum(log(pt + eps)) / N;
-            dy = y- y_gt;
+            dy = y - y_gt;
             %%% END YOUR CODE HERE %%%
         end
         

@@ -59,15 +59,18 @@ classdef fc_layer < layer
 		function [obj, y] = initialize(obj, x)
             % Initialize the layers parameters W, b, dW, db, etc.
             %%% START YOUR CODE HERE %%%
-            [width, height, channels, batch_size] = size(x);
+            width = x(1);
+            height = x(2);
+            channels = x(3);
             num_inputs = width * height * channels;
+            batch_size = x(4);
             % Parameters
-            obj.W = double(sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(num_inputs, obj.num_filters)-0.5));
+            obj.W = double(sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(obj.num_filters, num_inputs)-0.5));
 			obj.b = double(zeros(obj.num_filters,1));
 			
             % Gradients
-			obj.dW = double(zeros(num_inputs, obj.num_filters));
-			obj.db = double(zeros(obj.num_filters, 1));
+			obj.dW = double(zeros(obj.num_filters * batch_size, num_inputs * batch_size));
+			obj.db = double(zeros(obj.num_filters * batch_size, 1));
 			
             % Update (Useful for RMSProp and AdaM updates)
 			obj.uW = double(zeros(num_inputs, obj.num_filters));
@@ -78,7 +81,7 @@ classdef fc_layer < layer
 			obj.ab = 0;
 			
             % Output
-			y = double(zeros(1, 1, obj.num_filters, batch_size));
+			y = [obj.num_filters, 1, 1, batch_size];
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -100,7 +103,7 @@ classdef fc_layer < layer
             Wr = repmat(obj.W, batch_size, batch_size);
             br = repmat(obj.b, batch_size, 1);
             yr = Wr * xr + br;
-            y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
+            y = reshape(yr, [obj.num_filters, 1, 1, batch_size]);
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -112,14 +115,16 @@ classdef fc_layer < layer
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
             dyr = reshape(dy, [obj.num_filters * batch_size, 1]);
-            Wr = repmat(obj.W, batch_size, batch_size);
+            iWr = repmat(obj.W^(-1), batch_size, batch_size);
             br = repmat(obj.b, batch_size, 1);
-            dxr =  Wr\(dyr - br);
+            dxr =  iWr*(dyr - br);
             dx = reshape(dxr, [width, height, channels, batch_size]);
             
             % Compute the gradient dW
             xr = reshape(x, [num_inputs * batch_size, 1]);
-            obj.dWr = - (1 - obj.M) * obj.lr * dyr * xr' + obj.M * obj.dWr;
+            dWr = repmat(obj.W, batch_size, batch_size);
+            dbr = repmat(obj.b, batch_size, 1);
+            obj.dW = - (1 - obj.M) * obj.lr * dyr * xr' + obj.M * obj.dW;
             obj.db = - (1 - obj.M) * obj.lr * dyr + obj.M * obj.db;
             %%% END YOUR CODE HERE %%%
 		end
@@ -131,11 +136,15 @@ classdef fc_layer < layer
             % compute the update, you can use uW,ub and aW,ab to store
             % certain values
             %%% START YOUR CODE HERE %%%
+            [num_outputs, num_inputs] = size(obj.W);
+            dW = reshape(obj.dW, [num_outputs, num_inputs, batch_size]);
+            db = reshape(obj.db, [num_outputs, 1, batch_size]);
             
+            adW = mean(dW,3);
+            adb = mean(db,3);
             
-            
-            % obj.W = ...
-            % obj.b = ...
+            obj.W = obj.W + adW;
+            obj.b = obj.b + adb;
             %%% END YOUR CODE HERE %%%
 		end
 	end
