@@ -46,7 +46,7 @@ classdef fc_layer < layer
             if nargin > 2
                 obj.lr = double(lr);
             else
-                obj.lr = 0;
+                obj.lr = 0.15;
             end
             if nargin > 3
                 obj.M = double(M);
