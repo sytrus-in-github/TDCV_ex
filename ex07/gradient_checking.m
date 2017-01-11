@@ -24,6 +24,7 @@ numgrad = computeNumericalGradient(@(p) solv.opt_func(p, data, data, solv), thet
 [~,grad] = solv.opt_func(theta, data, data, solv);
 disp(numgrad')
 disp(grad')
+disp((numgrad ./ grad)')
 disp('--------')
 delta = numgrad-grad;
 diff = norm(delta)/norm(numgrad+grad);

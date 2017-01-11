@@ -105,13 +105,11 @@ classdef solver
             % the groundtruth labels (y_gt)
             %%% START YOUR CODE HERE %%%
             [~, ~, ~, N] = size(y); % Batch size
-            dy = (y(:) - y_gt(:)) / N;
+            dy = y(:) - y_gt(:);
             infnanguard(dy); % DEBUG
             L = dy' * dy / (2 * N);
-%             disp(L) 
-%             disp('***')
             infnanguard(L); % DEBUG
-            dy = reshape(dy, size(y));
+            dy = reshape(dy, size(y)) / N;
             %%% END YOUR CODE HERE %%%
         end
         
