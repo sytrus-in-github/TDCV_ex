@@ -10,14 +10,14 @@ net = neural_network();
 
 %----------------------- Feature extraction -----------------------------%
 % Add fully connected layer with 196 neurons
-net.layers{end+1} = fc_layer(n_hidden, [decay 0], [lr lr], [M M]);
+net.layers{end+1} = fc_layer(n_hidden, [decay 0], lr, M);
 
 % Add sigmoid layer
 net.layers{end+1} = sigmoid_layer(0.1, 3, 1);
 
 %--------------------------- Classifier ---------------------------------%
 % Add fully connected layer with 10 neurons
-net.layers{end+1} = fc_layer(n_out, [decay 0], [lr lr], [M M]);
+net.layers{end+1} = fc_layer(n_out, [decay 0], lr, M);
 
 net.layers{end+1} = softmax_layer();
 end
