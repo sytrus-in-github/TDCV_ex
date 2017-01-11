@@ -11,13 +11,17 @@ function stop = visualize_features(x,optimValues,state)
     global net;
     
     %%% START YOUR CODE HERE %%%
-    disp('visualize');
-    number_outputs = prod(net.input_size(1:3));
-    siz = sqrt(number_outputs);
-    batch_size = net.input_size(4);
-    image = zeros(number_outputs, number_outputs);
-    dy = zeros(1,1,number_outputs,batch_size);
-    for i = 1:100
+    
+    NB_HIDDEN = 100;
+    
+    [w, h, c, batch_size] = net.input_size;
+    if NB_HIDDEN > batch_size || c ~= 1
+        error('Not implemented yet')
+    end
+    image = zeros(w, h);
+    dy = zeros(1, 1, NB_HIDDEN, batch_size);
+    
+    for i = 1:NB_HIDDEN
         dy(1,1,i,i) = 1;
     end
 
