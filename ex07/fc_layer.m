@@ -92,21 +92,14 @@ classdef fc_layer < layer
             % Make use of reshape and repmat to create the tensors
             %%% START YOUR CODE HERE %%%
             % Compute the loss (L)
-            NW = norm(obj.W);
-            Nb = norm(obj.b);
+            NW = norm(obj.W, 'fro');
+            Nb = norm(obj.b, 'fro');
             L = obj.decay * [NW * NW; Nb * Nb] / 2;
-            infnanguard(L);
-%             disp(obj.decay)
-%             disp(size(obj.decay))
-%             disp(L);
-%             disp('--fc--')
-            
+            infnanguard(L);            
             %Compute the layers output (y)
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
-            
             xr = reshape(x, [num_inputs, batch_size]);
-%             Wr = repmat(obj.W, batch_size, batch_size);
             br = repmat(obj.b, 1, batch_size);
             yr = obj.W * xr + br;
             y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
@@ -137,13 +130,6 @@ classdef fc_layer < layer
             % compute the update, you can use uW,ub and aW,ab to store
             % certain values
             %%% START YOUR CODE HERE %%%
-%             [num_outputs, num_inputs] = size(obj.W);
-%             dWr = reshape(obj.dW, [num_outputs, num_inputs, batch_size]);
-%             dbr = reshape(obj.db, [num_outputs, 1, batch_size]);
-            
-%             obj.adW = mean(dWr,3);
-%             obj.adb = mean(dbr,3);
-            
             obj.uW = - obj.lr * obj.dW + obj.M * obj.uW;
             obj.ub = - obj.lr * obj.db + obj.M * obj.ub;
 
