@@ -95,7 +95,7 @@ classdef fc_layer < layer
             NW = norm(obj.W, 'fro');
             Nb = norm(obj.b, 'fro');
             L = obj.decay * [NW * NW; Nb * Nb] / 2;
-            infnanguard(L);            
+%             infnanguard(L);            
             %Compute the layers output (y)
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
@@ -130,11 +130,21 @@ classdef fc_layer < layer
             % compute the update, you can use uW,ub and aW,ab to store
             % certain values
             %%% START YOUR CODE HERE %%%
-            obj.uW = - obj.lr * obj.dW + obj.M * obj.uW;
-            obj.ub = - obj.lr * obj.db + obj.M * obj.ub;
-
-            obj.W = obj.W + obj.uW;
-            obj.b = obj.b + obj.ub;
+            %%{ 
+            % SGD + momentum
+            obj.uW = obj.lr * obj.dW + obj.M * obj.uW;
+            obj.ub = obj.lr * obj.db + obj.M * obj.ub;
+            obj.W = obj.W - obj.uW;
+            obj.b = obj.b - obj.ub;
+            %}
+            %{ 
+            % RMSprop
+              TODO
+            %}
+            %{ 
+            % Adam
+              TODO
+            %}
             %%% END YOUR CODE HERE %%%
 		end
 	end

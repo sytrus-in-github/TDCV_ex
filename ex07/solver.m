@@ -106,9 +106,9 @@ classdef solver
             %%% START YOUR CODE HERE %%%
             [~, ~, ~, N] = size(y); % Batch size
             dy = y(:) - y_gt(:);
-            infnanguard(dy); % DEBUG
+%             infnanguard(dy); % DEBUG
             L = dy' * dy / (2 * N);
-            infnanguard(L); % DEBUG
+%             infnanguard(L); % DEBUG
             dy = reshape(dy, size(y)) / N;
             %%% END YOUR CODE HERE %%%
         end
@@ -124,7 +124,7 @@ classdef solver
             % Compute the loss
             [L2, dy] = solv.l2_loss(y, y_gt);
             L = L + L2;
-            infnanguard(L);
+%             infnanguard(L);
 %             disp(L)
 %             disp('~~~')
 
