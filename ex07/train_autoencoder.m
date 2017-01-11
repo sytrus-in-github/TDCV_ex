@@ -38,7 +38,7 @@ theta = solv.network.get_theta();
 solv.network = solv.network.set_theta(opttheta);
 
 %% Visualize features
-visualize_features(opttheta);
+visualize_features();
 
 %% Save network
 solv.network.save(sprintf('trained_autoencoder.h5'));

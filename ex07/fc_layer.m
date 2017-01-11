@@ -113,6 +113,8 @@ classdef fc_layer < layer
             % Compute the gradient dx
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
+            disp(size(dy));
+            disp([obj.num_filters, batch_size]);
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);

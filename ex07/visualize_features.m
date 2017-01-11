@@ -17,11 +17,11 @@ function stop = visualize_features(x,optimValues,state)
     batch_size = net.input_size(4);
     image = zeros(number_outputs, number_outputs);
     dy = zeros(1,1,number_outputs,batch_size);
-    for i = 1:number_outputs
+    for i = 1:100
         dy(1,1,i,i) = 1;
     end
 
-    [~, dx] = net.backward_all(dy);
+    [~, dx] = net.backward_from_to(dy,3,1);
     for i = 1:siz
         for j = 1:siz
             image((i-1)*siz+1:i*siz,(j-1)*siz+1:j*siz) = dx(1:siz,1:siz,1,i+siz*(j-1));

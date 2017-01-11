@@ -67,8 +67,6 @@ classdef sigmoid_layer < layer
                 dL = 0;
             else
                 dL = obj.beta * (obj.A_avg - obj.alpha) ./ (obj.A_avg .* (1 - obj.A_avg)) / (w * h * b); % derivative of KL div / y
-                %dL = obj.beta * (obj.A_avg - obj.alpha) ./ (obj.alpha .* (1 - obj.alpha)) / (w * h * b); % derivative of KL div / y
-%                 dL = obj.beta * sum(- obj.alpha / obj.A_avg + (1 - obj.alpha) / (1 - obj.A_avg));
             end
             dx = (dy + dL) .* exp(-x) ./ (1+exp(-x)).^2;
 %             infnanguard(dx); % DEBUG
