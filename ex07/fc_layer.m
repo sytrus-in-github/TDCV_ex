@@ -128,8 +128,8 @@ classdef fc_layer < layer
             
             % Compute the gradient dW
             xr = reshape(x, [num_inputs, batch_size]);
-            obj.dW = - obj.lr * (dyr * xr' + obj.decay * obj.W) + obj.M * obj.dW;
-            obj.db = - obj.lr * (sum(dyr, 2)+ obj.decay * obj.b) + obj.M * obj.db;
+            obj.dW = - obj.lr * (dyr * xr' / batch_size + obj.decay * obj.W) + obj.M * obj.dW;
+            obj.db = - obj.lr * (mean(dyr, 2) + obj.decay * obj.b) + obj.M * obj.db;
             %%% END YOUR CODE HERE %%%
 		end
 		
