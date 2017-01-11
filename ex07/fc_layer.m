@@ -66,6 +66,7 @@ classdef fc_layer < layer
             batch_size = x(4);
             % Parameters
             obj.W = double(2*sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(obj.num_filters, num_inputs)-0.5));
+            disp(size(obj.W));
 			obj.b = double(zeros(obj.num_filters,1));
 			
             % Gradients
@@ -92,6 +93,7 @@ classdef fc_layer < layer
             % Make use of reshape and repmat to create the tensors
             %%% START YOUR CODE HERE %%%
             % Compute the loss (L)
+            disp(size(obj.W));
             NW = norm(obj.W, 'fro');
             Nb = norm(obj.b, 'fro');
             L = obj.decay * [NW * NW; Nb * Nb] / 2;
@@ -100,7 +102,9 @@ classdef fc_layer < layer
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
             xr = reshape(x, [num_inputs, batch_size]);
+            disp(size(xr));
             br = repmat(obj.b, 1, batch_size);
+            disp(size(br));
             yr = obj.W * xr + br;
             y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
             %%% END YOUR CODE HERE %%%
@@ -113,8 +117,8 @@ classdef fc_layer < layer
             % Compute the gradient dx
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
-            disp(size(dy));
-            disp([obj.num_filters, batch_size]);
+%             disp(size(dy));
+%             disp([obj.num_filters, batch_size]);
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
