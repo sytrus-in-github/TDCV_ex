@@ -22,6 +22,9 @@ solv = solver(net,'L2');
 theta = solv.network.get_theta();
 numgrad = computeNumericalGradient(@(p) solv.opt_func(p, data, data, solv), theta);
 [~,grad] = solv.opt_func(theta, data, data, solv);
+disp(numgrad')
+disp(grad')
+disp('--------')
 delta = numgrad-grad;
 diff = norm(delta)/norm(numgrad+grad);
 disp(diff); % Should be smaller than 1e-9

@@ -120,16 +120,13 @@ classdef fc_layer < layer
             % Compute the gradient dx
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
-%             disp([size(dy), obj.num_filters, batch_size]);
-%             disp('--EOB--')
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
-            
             % Compute the gradient dW
             xr = reshape(x, [num_inputs, batch_size]);
-            obj.dW = - obj.lr * (dyr * xr' + obj.decay * obj.W) + obj.M * obj.dW;
-            obj.db = - obj.lr * (sum(dyr, 2)+ obj.decay * obj.b) + obj.M * obj.db;
+            obj.dW = dyr * xr' + obj.decay(1) * obj.W;
+            obj.db = sum(dyr, 2)+ obj.decay(2) * obj.b;
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -147,8 +144,11 @@ classdef fc_layer < layer
 %             obj.adW = mean(dWr,3);
 %             obj.adb = mean(dbr,3);
             
-            obj.W = obj.W + obj.dW;
-            obj.b = obj.b + obj.db;
+            obj.uW = - obj.lr * obj.dW + obj.M * obj.uW;
+            obj.ub = - obj.lr * obj.db + obj.M * obj.ub;
+
+            obj.W = obj.W + obj.uW;
+            obj.b = obj.b + obj.ub;
             %%% END YOUR CODE HERE %%%
 		end
 	end
