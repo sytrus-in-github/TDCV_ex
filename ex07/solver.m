@@ -106,8 +106,10 @@ classdef solver
             %%% START YOUR CODE HERE %%%
             [~, ~, ~, N] = size(y); % Batch size
             dy = (y - reshape(y_gt, size(y))) / N;
+            infnanguard(dy); % DEBUG
             dy_ = dy(:);
             L = dy_' * dy_ / (2 * N);
+            infnanguard(L); % DEBUG
             %%% END YOUR CODE HERE %%%
         end
         
