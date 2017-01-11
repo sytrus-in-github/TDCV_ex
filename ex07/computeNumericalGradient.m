@@ -10,6 +10,7 @@ EPSILON = 1e-4;
 for i=1:length(numgrad)
     e_i = zeros(size(theta));
     e_i(i) = EPSILON;
+%     disp([i, 888 ,size(numgrad(i)), 888, size(F(theta + e_i))]);
     numgrad(i) = (F(theta + e_i) - F(theta - e_i))/(2*EPSILON);
 end
 

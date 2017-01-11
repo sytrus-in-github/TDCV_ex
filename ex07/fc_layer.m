@@ -94,7 +94,12 @@ classdef fc_layer < layer
             % Compute the loss (L)
             NW = norm(obj.W);
             Nb = norm(obj.b);
-            L = obj.decay / 2 * (NW * NW + Nb * Nb);
+            L = obj.decay * [NW * NW; Nb * Nb] / 2;
+            infnanguard(L);
+%             disp(obj.decay)
+%             disp(size(obj.decay))
+%             disp(L);
+%             disp('--fc--')
             
             %Compute the layers output (y)
             [width, height, channels, batch_size] = size(x);
@@ -116,6 +121,7 @@ classdef fc_layer < layer
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
 %             disp([size(dy), obj.num_filters, batch_size]);
+%             disp('--EOB--')
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);

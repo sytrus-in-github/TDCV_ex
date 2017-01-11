@@ -105,11 +105,13 @@ classdef solver
             % the groundtruth labels (y_gt)
             %%% START YOUR CODE HERE %%%
             [~, ~, ~, N] = size(y); % Batch size
-            dy = (y - reshape(y_gt, size(y))) / N;
+            dy = (y(:) - y_gt(:)) / N;
             infnanguard(dy); % DEBUG
-            dy_ = dy(:);
-            L = dy_' * dy_ / (2 * N);
+            L = dy' * dy / (2 * N);
+%             disp(L) 
+%             disp('***')
             infnanguard(L); % DEBUG
+            dy = reshape(dy, size(y));
             %%% END YOUR CODE HERE %%%
         end
         
@@ -124,6 +126,9 @@ classdef solver
             % Compute the loss
             [L2, dy] = solv.l2_loss(y, y_gt);
             L = L + L2;
+            infnanguard(L);
+%             disp(L)
+%             disp('~~~')
 
             % Backward pass
             [solv.network, ~] = solv.network.backward_all(dy);

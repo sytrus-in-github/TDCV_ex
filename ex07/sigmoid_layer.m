@@ -53,6 +53,8 @@ classdef sigmoid_layer < layer
                 L = obj.beta * sum(obj.alpha * log(obj.alpha / obj.A_avg) + (1 - obj.alpha) * log((1 - obj.alpha) / (1 - obj.A_avg)));
             end
             infnanguard(L); % DEBUG
+%             disp(L);
+%             disp('--sg--')
             %%% END YOUR CODE HERE %%%
 		end
 		
