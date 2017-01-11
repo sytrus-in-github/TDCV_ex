@@ -65,17 +65,17 @@ classdef fc_layer < layer
             num_inputs = width * height * channels;
             batch_size = x(4);
             % Parameters
-            obj.W = double(2*sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(obj.num_filters, num_inputs)-0.5));
-            disp(size(obj.W));
-			obj.b = double(zeros(obj.num_filters,1));
+            obj.W = double(2*sqrt(6)/(num_inputs+obj.num_filters+1)*(rand(num_inputs, obj.num_filters)-0.5));
+%             disp(size(obj.W));
+			obj.b = double(zeros(1, obj.num_filters));
 			
             % Gradients
-			obj.dW = double(zeros(obj.num_filters, num_inputs));
-			obj.db = double(zeros(obj.num_filters, 1));
+			obj.dW = double(zeros(num_inputs, obj.num_filters));
+			obj.db = double(zeros(1, obj.num_filters));
 			
             % Update (Useful for RMSProp and AdaM updates)
 			obj.uW = double(zeros(num_inputs, obj.num_filters));
-			obj.ub = double(zeros(obj.num_filters, 1));
+			obj.ub = double(zeros(1, obj.num_filters));
             
             % Average (Useful for RMSProp and AdaM updates)
 			obj.aW = mean(obj.W);
@@ -103,10 +103,10 @@ classdef fc_layer < layer
             num_inputs = width * height * channels;
             xr = reshape(x, [num_inputs, batch_size]);
             disp(size(xr));
-            br = repmat(obj.b, 1, batch_size);
+            br = repmat(obj.b, batch_size, 1);
             disp(size(br));
-            yr = obj.W * xr + br;
-            y = reshape(yr, [1, 1, obj.num_filters, batch_size]);
+            yr = xr' * obj.W + br;
+            y = reshape(yr', [1, 1, obj.num_filters, batch_size]);
             %%% END YOUR CODE HERE %%%
 		end
 		
@@ -120,12 +120,12 @@ classdef fc_layer < layer
 %             disp(size(dy));
 %             disp([obj.num_filters, batch_size]);
             dyr = reshape(dy, [obj.num_filters, batch_size]);
-            dxr =  obj.W' * dyr;
+            dxr =  obj.W * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
             % Compute the gradient dW
             xr = reshape(x, [num_inputs, batch_size]);
-            obj.dW = dyr * xr' + obj.decay(1) * obj.W;
-            obj.db = sum(dyr, 2)+ obj.decay(2) * obj.b;
+            obj.dW = xr * dyr' + obj.decay(1) * obj.W;
+            obj.db = sum(dyr, 2)'+ obj.decay(2) * obj.b;
             %%% END YOUR CODE HERE %%%
 		end
 		
