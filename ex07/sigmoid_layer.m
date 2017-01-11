@@ -45,14 +45,14 @@ classdef sigmoid_layer < layer
             % Compute the average activation (A_avg), the loss (L) and the layers output (y)
             %%% START YOUR CODE HERE %%%
             y = 1/(1+exp(-x));
-            infnanguard(y); % DEBUG
+            %infnanguard(y); % DEBUG
             obj.A_avg = mean(mean(mean(y, 4), 2), 1);
             if (obj.alpha == 0 || obj.alpha == 1)
                 L = 0;
             else
                 L = obj.beta * sum(obj.alpha * log(obj.alpha / obj.A_avg) + (1 - obj.alpha) * log((1 - obj.alpha) / (1 - obj.A_avg)));
             end
-            infnanguard(L); % DEBUG
+            %infnanguard(L); % DEBUG
 %             disp(L);
 %             disp('--sg--')
             %%% END YOUR CODE HERE %%%
@@ -67,11 +67,9 @@ classdef sigmoid_layer < layer
                 dL = 0;
             else
                 dL = obj.beta * (obj.A_avg - obj.alpha) ./ (obj.A_avg .* (1 - obj.A_avg)) / (w * h * b); % derivative of KL div / y
-                %dL = obj.beta * (obj.A_avg - obj.alpha) ./ (obj.alpha .* (1 - obj.alpha)) / (w * h * b); % derivative of KL div / y
-%                 dL = obj.beta * sum(- obj.alpha / obj.A_avg + (1 - obj.alpha) / (1 - obj.A_avg));
             end
             dx = (dy + dL) .* exp(-x) ./ (1+exp(-x)).^2;
-            infnanguard(dx); % DEBUG
+            %infnanguard(dx); % DEBUG
             %%% END YOUR CODE HERE %%%
         end
 	end

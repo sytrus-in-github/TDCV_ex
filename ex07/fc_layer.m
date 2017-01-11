@@ -95,7 +95,7 @@ classdef fc_layer < layer
             NW = norm(obj.W, 'fro');
             Nb = norm(obj.b, 'fro');
             L = obj.decay * [NW * NW; Nb * Nb] / 2;
-            infnanguard(L);            
+            %infnanguard(L);            
             %Compute the layers output (y)
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
@@ -113,6 +113,8 @@ classdef fc_layer < layer
             % Compute the gradient dx
             [width, height, channels, batch_size] = size(x);
             num_inputs = width * height * channels;
+            disp(size(dy));
+            disp([obj.num_filters, batch_size]);
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W' * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
