@@ -116,6 +116,7 @@ classdef fc_layer < layer
             dyr = reshape(dy, [obj.num_filters, batch_size]);
             dxr =  obj.W * dyr;
             dx = reshape(dxr, [width, height, channels, batch_size]);
+%             infnanguard(dx);
             % Compute the gradient dW
             xr = reshape(x, [num_inputs, batch_size]);
             obj.dW = xr * dyr' + obj.decay(1) * obj.W;

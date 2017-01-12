@@ -31,15 +31,15 @@ solv = solver(net,'L2');
 % The optimizer expects all the variables and their derivatives as two
 % vectors so the helper functions get_theta and set_theta of the
 % neural_network class convert the network parameters for us
-num_iterations = 50;
+num_iterations = 50; % 50
+% options = optimoptions(@fmincon,'Display','iter-detailed','GradObj','on','Hessian','lbfgs','MaxIter',num_iterations,'OutputFcn', @plot_loss);
 options = optimoptions(@fmincon,'Display','iter-detailed','GradObj','on','Hessian','lbfgs','MaxIter',num_iterations,'OutputFcn', {@plot_loss, @visualize_features});
 theta = solv.network.get_theta();
 [opttheta, cost] = fmincon( @(p) solv.opt_func(p, data, data, solv), theta, [],[],[],[],[],[],[],options);
 solv.network = solv.network.set_theta(opttheta);
 
 %% Visualize features
-% visualize_features(opttheta);
-plot_loss(opttheta);
+%visualize_features(opttheta);
 
 %% Save network
 solv.network.save(sprintf('trained_autoencoder.h5'));

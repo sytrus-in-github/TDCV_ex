@@ -15,6 +15,7 @@ function stop = plot_loss(x,optimValues,state)
     if length(losses) == optimValues.iteration+1
         semilogy(0:optimValues.iteration, losses, 'k');
     end
+    %drawnow
     
     stop = 0;
 end

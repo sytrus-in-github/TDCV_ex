@@ -11,30 +11,59 @@ function stop = visualize_features(x,optimValues,state)
     global net;
     
     %%% START YOUR CODE HERE %%%
-    
-    NB_HIDDEN = 100;
-    
-    [w, h, c, batch_size] = net.input_size;
-    if NB_HIDDEN > batch_size || c ~= 1
-        error('Not implemented yet')
-    end
-    image = zeros(w, h);
-    dy = zeros(1, 1, NB_HIDDEN, batch_size);
-    
-    for i = 1:NB_HIDDEN
-        dy(1,1,i,i) = 1;
-    end
-
-    [~, dx] = net.backward_from_to(dy,2,1);
+    siz = 10;
+    bord = 2;
+    [w, h, ~, ~] = size(net.blobs{1});
+    image = zeros((w+bord) * siz, (h+bord) * siz);
+    %%{
+    % fc1
+    weights = x(1:w*h*siz*siz);
+    ws = reshape(weights, [w, h, siz, siz]);
     for i = 1:siz
         for j = 1:siz
-            image((i-1)*siz+1:i*siz,(j-1)*siz+1:j*siz) = dx(1:siz,1:siz,1,i+siz*(j-1));
+            image((i-1)*(w+bord)+1:(i-1)*(w+bord)+w,(j-1)*(h+bord)+1:(j-1)*(h+bord)+h) = ws(1:w,1:h,i,j);
         end
     end
+    %}
+    %{
+    % fc2
+    weights = x(101+w*h*siz*siz:100+2*w*h*siz*siz);
+    ws = reshape(weights, [siz, siz, w, h]);
+    for i = 1:siz
+        for j = 1:siz
+            image((i-1)*(w+bord)+1:(i-1)*(w+bord)+w,(j-1)*(h+bord)+1:(j-1)*(h+bord)+h) = ws(i,j,1:w,1:h);
+        end
+    end
+    %}
+    %{
+    % Only with solve
+    NB_HIDDEN = 100;
+    siz = 10;
+    dy = ones(1, 1, NB_HIDDEN, batch_size)*0.1;
     
+    for i = 1:NB_HIDDEN
+        dy(1,1,i,i) = 0.9;
+    end
+    [~, dx] = net.backward_from_to(dy,2,1);
+    
+%     disp([max(dx(:)), min(dx(:))])
+    for i = 1:siz
+        for j = 1:siz
+            image((i-1)*(w+bord)+1:(i-1)*(w+bord)+w,(j-1)*(h+bord)+1:(j-1)*(h+bord)+h) = dx(1:w,1:h,1,i+siz*(j-1));
+        end
+    end
+
+    %}
+    nz = image(image ~= 0);
+    me = mean(nz);
+    mx = max(nz);
+    mn = min(nz);
+    %disp([mx, me, mn]);
+    image(image == 0) = me;
+    image = (image+mn)/(mx+mn);
     gray_image = mat2gray(image);
     
-    imwrite(gray_image,'data/features.png');
+    imwrite(gray_image,strcat('data/features_',int2str(optimValues.iteration),'.png'));
     
     
     

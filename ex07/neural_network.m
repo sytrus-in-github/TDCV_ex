@@ -74,7 +74,7 @@ classdef neural_network
 			for i=from:-1:to
 				[obj.layers{i}, obj.bblobs{i}] = obj.layers{i}.backward(obj.bblobs{i+1}, obj.blobs{i});
             end
-            dx = obj.bblobs{1};
+            dx = obj.bblobs{to};
         end
         
         % Load trained parameters from hdf5 file

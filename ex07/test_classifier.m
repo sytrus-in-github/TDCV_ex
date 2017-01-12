@@ -60,7 +60,9 @@ end
 confusion_matrix = zeros(num_classes, num_classes);
 %%% START YOUR CODE HERE %%%
 
-
+for i = 1:size(label)
+	confusion_matrix(confusions(i), label(i)) = confusion_matrix(confusions(i), label(i)) + 1;
+end
 
 
 
@@ -87,6 +89,6 @@ end
 
 %% Compute accuracy
 %%% START YOUR CODE HERE %%%
-% accuracy = ...
+accuracy = sum(diag(confusion_matrix))/sum(confusion_matrix);
 %%% END YOUR CODE HERE %%%
 disp(accuracy);
