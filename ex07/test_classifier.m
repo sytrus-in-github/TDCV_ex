@@ -10,7 +10,7 @@ step_by_step = 0;
 % Specify the input size of the network
 % width x height x channels x batch size
 input_size = [28 28 1 batch_size];
-num_filters = 100;
+num_filters = 196;
 num_classes = 10;
 net = setup_classifier(num_filters, num_classes);
 
@@ -61,8 +61,7 @@ confusion_matrix = zeros(num_classes, num_classes);
 %%% START YOUR CODE HERE %%%
 x = predictions(:);
 y = label(:);
-y
-size(y)
+
 for i = 1:size(y)
 %     if (mod(i, batch_size) == 0)
 %         disp(strcat('batch ',int2str(i/batch_size)));

@@ -93,12 +93,18 @@ classdef solver
             % number e.g. eps inside the log
             %%% START YOUR CODE HERE %%%
             [~, ~, nc, N] = size(y); % 1, 1, nb class, batch size
+            %{
+            L = 0;
+            dy = y;
+            %}
+            %%{
             yp = reshape(y, [nc, N]);
             idx = y_gt(:)' + 0:nc:nc*N-1;
             yt = zeros(size(yp));
             yt(idx) = 1;
             L = - sum(log(yp(idx) + eps)) / N;
             dy = reshape(yp - yt, size(y)) / N;
+            %}            
             %%% END YOUR CODE HERE %%%
         end
         

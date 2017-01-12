@@ -7,7 +7,7 @@ global net;
 % Specify the input size of the network
 % width x height x channels x batch size
 input_size = [28 28 1 10000];
-num_filters = 100;
+num_filters = 196;
 number_outputs = prod(input_size(1:3));
 net = setup_autoencoder(num_filters, number_outputs);
 

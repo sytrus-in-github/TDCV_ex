@@ -11,7 +11,7 @@ function stop = visualize_features(x,optimValues,state)
     global net;
     
     %%% START YOUR CODE HERE %%%
-    siz = 10;
+    siz = 14;
     bord = 2;
     [w, h, ~, ~] = size(net.blobs{1});
     image = zeros((w+bord) * siz, (h+bord) * siz);
