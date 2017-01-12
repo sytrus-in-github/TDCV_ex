@@ -44,6 +44,10 @@ function stop = visualize_features(x,optimValues,state)
     for i = 1:NB_HIDDEN
         dy(1,1,i,i) = 0.9;
     end
+<<<<<<< HEAD
+=======
+    siz = sqrt(NB_HIDDEN);
+>>>>>>> 28d161b17a243a6df7fde5641fc8dbb7b92c92b3
     [~, dx] = net.backward_from_to(dy,2,1);
     
 %     disp([max(dx(:)), min(dx(:))])
