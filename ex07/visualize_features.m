@@ -11,11 +11,13 @@ function stop = visualize_features(x,optimValues,state)
     global net;
     
     %%% START YOUR CODE HERE %%%
+    net = net.set_theta(x);
+    assert(max(abs(net.get_theta() - x))<0.01);
     siz = 14;
     bord = 2;
-    [w, h, ~, ~] = size(net.blobs{1});
+    [w, h, ~, batch_size] = size(net.blobs{1});
     image = zeros((w+bord) * siz, (h+bord) * siz);
-    %%{
+    %{
     % fc1
     weights = x(1:w*h*siz*siz);
     ws = reshape(weights, [w, h, siz, siz]);
@@ -35,20 +37,17 @@ function stop = visualize_features(x,optimValues,state)
         end
     end
     %}
-    %{
+    %%{
     % Only with solve
-    NB_HIDDEN = 100;
-    siz = 10;
-    dy = ones(1, 1, NB_HIDDEN, batch_size)*0.1;
+    NB_HIDDEN = 196;
+    siz = 14;
+    dy = ones(1, 1, NB_HIDDEN, batch_size)*0.001;
     
     for i = 1:NB_HIDDEN
-        dy(1,1,i,i) = 0.9;
+        dy(1,1,i,i) = 0.999;
     end
-<<<<<<< HEAD
-=======
-    siz = sqrt(NB_HIDDEN);
->>>>>>> 28d161b17a243a6df7fde5641fc8dbb7b92c92b3
-    [~, dx] = net.backward_from_to(dy,2,1);
+
+    [net, dx] = net.backward_from_to(dy,2,1);
     
 %     disp([max(dx(:)), min(dx(:))])
     for i = 1:siz

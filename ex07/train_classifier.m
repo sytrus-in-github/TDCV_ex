@@ -13,7 +13,7 @@ net = setup_classifier(num_filters, num_classes);
 
 %% Load pretrained network
 net = net.initialize(input_size);
-net = net.load('trained_autoencoder_196.h5', [1]);
+net = net.load('trained_autoencoder.h5', [1]);
 
 %% Load trainings data
 % Download dataset from http://yann.lecun.com/exdb/mnist/
@@ -29,7 +29,7 @@ label = label(:,permutation);
 solv = solver(net,'log');
 
 %% Train the network
-solv = solv.solve(data, label, 200);
+solv = solv.solve(data, label, 1000);
 
 %% Save network
 solv.network.save(sprintf('trained_classifier.h5'));

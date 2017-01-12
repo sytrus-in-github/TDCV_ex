@@ -4,7 +4,7 @@
 
 %% Parameters
 batch_size = 40;
-step_by_step = 0;
+step_by_step = 1;
 
 %% Setup the network
 % Specify the input size of the network
@@ -13,7 +13,7 @@ input_size = [28 28 1 batch_size];
 num_filters = 196;
 num_classes = 10;
 net = setup_classifier(num_filters, num_classes);
-
+ 
 %% Initialize the network
 net = net.initialize(input_size);
 
