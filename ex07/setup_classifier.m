@@ -9,7 +9,7 @@ decay = 0.0005; % Decay
 net = neural_network();
 
 %----------------------- Feature extraction -----------------------------%
-% Add fully connected layer with 196 neurons
+% Add fully connected layer with 100 neurons
 net.layers{end+1} = fc_layer(n_hidden, [decay 0], lr, M);
 
 % Add sigmoid layer

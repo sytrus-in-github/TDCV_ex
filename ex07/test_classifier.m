@@ -3,8 +3,8 @@
 % Script to test the neural network
 
 %% Parameters
-batch_size = 4;
-step_by_step = 1;
+batch_size = 40;
+step_by_step = 0;
 
 %% Setup the network
 % Specify the input size of the network
@@ -22,8 +22,8 @@ net = net.load('trained_classifier.h5');
 
 %% Load training data
 % Download dataset from http://yann.lecun.com/exdb/mnist/
-data = loadMNISTImages('data/t10k-images-idx3-ubyte');
-label = loadMNISTLabels('data/t10k-labels-idx1-ubyte');
+data = loadMNISTImages('data/t10k-images.idx3-ubyte');
+label = loadMNISTLabels('data/t10k-labels.idx1-ubyte');
 
 % Store the predictions
 predictions = zeros(size(label));
@@ -41,7 +41,7 @@ for i=1:ceil(size(data,4)/batch_size)
     % Store
     predictions((i-1)*batch_size+1:i*batch_size) =  maxlabel(:);
     
-    % Plot
+    % Plot 
     if step_by_step
         cnt = 1;
         for j=1:batch_size
@@ -59,9 +59,15 @@ end
 %% Compute confusion matrix
 confusion_matrix = zeros(num_classes, num_classes);
 %%% START YOUR CODE HERE %%%
-
-for i = 1:size(label)
-	confusion_matrix(confusions(i), label(i)) = confusion_matrix(confusions(i), label(i)) + 1;
+x = predictions(:);
+y = label(:);
+y
+size(y)
+for i = 1:size(y)
+%     if (mod(i, batch_size) == 0)
+%         disp(strcat('batch ',int2str(i/batch_size)));
+%     end
+	confusion_matrix(x(i), y(i)) = confusion_matrix(x(i), y(i)) + 1;
 end
 
 
@@ -89,6 +95,6 @@ end
 
 %% Compute accuracy
 %%% START YOUR CODE HERE %%%
-accuracy = sum(diag(confusion_matrix))/sum(confusion_matrix);
+accuracy = sum(diag(confusion_matrix))/sum(confusion_matrix(:));
 %%% END YOUR CODE HERE %%%
 disp(accuracy);

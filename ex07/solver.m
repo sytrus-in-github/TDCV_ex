@@ -58,7 +58,7 @@ classdef solver
             end
             
             % Visualize
-            visualize_features(obj.network.get_theta());
+            % visualize_features(obj.network.get_theta());
         end
 		
         % Train the network
