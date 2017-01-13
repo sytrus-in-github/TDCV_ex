@@ -81,6 +81,11 @@ classdef solver
                 if (i > 0) && (mod(i, obj.snapshot_interval) == 0)
                     obj.network.save(sprintf('trained_net_%d.h5', i));
                 end
+                
+                % Shuffle data
+                permutation = randperm(size(x,4));
+                x = x(:,:,:,permutation);
+                y_gt = y_gt(:,permutation);
 			end
         end
     end
@@ -93,11 +98,17 @@ classdef solver
             % number e.g. eps inside the log
             %%% START YOUR CODE HERE %%%
             [~, ~, nc, N] = size(y); % 1, 1, nb class, batch size
-            %{
+            %%{
             L = 0;
             dy = y;
+            for i = 1:N
+                L = L - log(y(1, 1, y_gt(i),i) + eps);
+                dy(1,1,y_gt(i),i) = dy(1,1,y_gt(i),i) - 1;
+            end
+            L = L/N;
+            dy = dy/N;
             %}
-            %%{
+            %{
             yp = reshape(y, [nc, N]);
             idx = y_gt(:)' + 0:nc:nc*N-1;
             yt = zeros(size(yp));
@@ -129,9 +140,13 @@ classdef solver
             [solv.network, y, L] = solv.network.forward_all(x);
 
             % Compute the loss
-            [L2, dy] = solv.l2_loss(y, y_gt);
-            L = L + L2;
-
+            if (strcmp(solv.loss_type, 'L2'))
+                [L2, dy] = solv.l2_loss(y, y_gt);
+                L = L + L2;
+            else
+                [L2, dy] = solv.log_loss(y, y_gt);
+                L = L + L2;
+            end
             % Backward pass
             [solv.network, ~] = solv.network.backward_all(dy);
             

@@ -16,7 +16,8 @@ classdef softmax_layer < layer
 			% per channel and sample before computing the exponential.
 			%%% START YOUR CODE HERE %%%
             L = 0;
-            mx = max(max(x, [], 4), [], 3);
+            mx = max(max(max(max(x, [], 4), [], 3), [], 2), [], 1);
+            %mx = max(x(:));
             y = exp(x-mx) ./ sum(exp(x-mx), 3);
 			%%% END YOUR CODE HERE %%%
 		end
