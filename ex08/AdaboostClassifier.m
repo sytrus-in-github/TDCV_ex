@@ -3,7 +3,8 @@ classdef AdaboostClassifier
     %   Detailed explanation goes here
     
     properties
-        WeakClassifierArray= WeakClassifier; % array of weak classifiers
+        WeakClassifierArray=WeakClassifier_; % array of weak classifiers_
+        % WeakClassifierArray=WeakClassifier; % array of weak classifiers
         Alpha; % array of alpha coefficients relative to the classifiers
     end
     
@@ -12,7 +13,8 @@ classdef AdaboostClassifier
             % Initialize the Adaboost classifier with numberWeakClassifiers
             % initialized weak classifiers with alpha coefficients equal to
             % 0.
-            obj.WeakClassifierArray(1:numberWeakClassifiers,1) = WeakClassifier;
+            obj.WeakClassifierArray(1:numberWeakClassifiers,1) = WeakClassifier_;
+            % obj.WeakClassifierArray(1:numberWeakClassifiers,1) = WeakClassifier;
             obj.Alpha = zeros(numberWeakClassifiers,1);
         end
         
@@ -26,6 +28,7 @@ classdef AdaboostClassifier
             
             % Train successively the weak classifiers
             for i = 1:size(obj.WeakClassifierArray)
+                disp(i)
                 [obj.WeakClassifierArray(i,1), alpha, importanceWeights] = obj.WeakClassifierArray(i,1).Train(trainingExamples, labels, importanceWeights);
                 obj.Alpha(i,1) = alpha;
             end
