@@ -9,10 +9,11 @@ classdef VJDetector
     methods
         function obj = VJDetector(imgfile, classifierfile, imgscale, base_scale)
             obj.classifiers = loadHaarLikeClassifiers(classifierfile);
-            intimg = double(imresize(rgb2gray(imread(imgfile)),imgscale));
-            intimg = cumsum(cumsum(intimg,1),2);
-            intimg = [zeros(size(intimg,1),1),intimg];
-            obj.intimg = [zeros(1,size(intimg,2));intimg];
+            %intimg = double(imresize(rgb2gray(imread(imgfile)),imgscale));
+            %intimg = cumsum(cumsum(intimg,1),2);
+            %intimg = [zeros(size(intimg,1),1),intimg];
+            %obj.intimg = [zeros(1,size(intimg,2));intimg];
+            obj.intimg = integralImage(imresize(rgb2gray(imread(imgfile)),imgscale));
             obj.baseScale=base_scale;
         end
         
