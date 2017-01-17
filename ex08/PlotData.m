@@ -1,4 +1,4 @@
-function out = PlotData( dataPoints, labels, numFigure )
+function out = PlotData( dataPoints, labels, numFigure, fileName )
 %PLOTDATA Summary of this function goes here
 %   Detailed explanation goes here
     figure(numFigure);
@@ -11,6 +11,7 @@ function out = PlotData( dataPoints, labels, numFigure )
         end
     end
     scatter(dataPoints(:,1),dataPoints(:,2),[],colors, '+');
+    saveas(gcf, fileName);
     out = 0;
 end
 

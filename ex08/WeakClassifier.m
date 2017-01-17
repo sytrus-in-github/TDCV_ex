@@ -12,11 +12,9 @@ classdef WeakClassifier
         function obj = WeakClassifier()
             % Initialize the properties with any value since they won't be
             % used.
-            %dimensionThreshold = 1;
-            %threshold = 0;
         end
         
-        function [obj, alpha, importanceWeights] = Train(obj, trainingExamples, labels, importanceWeights)
+        function [obj, classificationError, labelCorrelation] = Train(obj, trainingExamples, labels, importanceWeights)
             % Train the weak classifier on the training set with given
             % importance weights. The function returns the trained
             % classifier, the output weight alpha of the classifier and the
@@ -55,16 +53,9 @@ classdef WeakClassifier
             obj.threshold = bestThreshold;
             obj.dimensionThreshold = bestDimensionThreshold;
             
-%             disp('clas');
-%             disp(obj.threshold);
-%             disp(obj.dimensionThreshold);
-            
-            % Compute alpha
-            alpha = log((1 - bestError)/bestError)/2;
-            
-            % Update importance weights
-            importanceWeights = importanceWeights .* exp(- alpha * (labels .* bestPredictedLabels));
-            importanceWeights = importanceWeights / sum(importanceWeights);
+            % Get the classification error and the label correlation
+            classificationError = bestError;
+            labelCorrelation = labels .* bestPredictedLabels;
         end
         
         function predictedLabels = Test(obj, testingExamples)
