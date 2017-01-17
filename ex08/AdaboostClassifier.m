@@ -68,7 +68,7 @@ classdef AdaboostClassifier
             error = zeros(length(obj.WeakClassifierArray),1);
             for i = 1:length(error)
                 predictedLabels = obj.PartialTest(testingExamples, i);
-                error(i,1) = sum(abs(predictedLabels - labels))/(2*length(labels));
+                error(i,1) = round(sum(abs(predictedLabels - labels))/(2*length(labels));
             end
             plot(error,'b');
             saveas(gcf, fileName);

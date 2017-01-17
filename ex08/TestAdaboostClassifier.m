@@ -1,7 +1,7 @@
 % Number of weak classifiers
 N = 1000;
 
-dataset = 'data3';
+dataset = 'data1';
 % Load data1.mat
 load(strcat(dataset,'.mat'));
 

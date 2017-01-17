@@ -75,7 +75,7 @@ classdef VJDetector
                         left = left + obj.h(c,i,j) * cls.alpha;
                         right = right + cls.alpha;
                     end
-                    if left > right/2.5 % 2 not working ... 2.1 for faceC
+                    if left >= right/2.5 % 2 not working ... 2.1 for faceC
                         disp([i, j, left right right/left])
                         ret{end+1}=[i, j];
                     end
