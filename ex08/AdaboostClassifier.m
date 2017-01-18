@@ -3,7 +3,6 @@ classdef AdaboostClassifier
     %   Detailed explanation goes here
     
     properties
-        %WeakClassifierArray=WeakClassifier_; % array of weak classifiers_
         WeakClassifierArray=WeakClassifier; % array of weak classifiers
         Alpha; % array of alpha coefficients relative to the classifiers
     end
@@ -13,7 +12,6 @@ classdef AdaboostClassifier
             % Initialize the Adaboost classifier with numberWeakClassifiers
             % initialized weak classifiers with alpha coefficients equal to
             % 0.
-            %obj.WeakClassifierArray(1:numberWeakClassifiers,1) = WeakClassifier_;
             obj.WeakClassifierArray(1:numberWeakClassifiers,1) = WeakClassifier;
             obj.Alpha = zeros(numberWeakClassifiers,1);
         end
@@ -63,7 +61,7 @@ classdef AdaboostClassifier
         end
         
         function out = PlotErrorEvolution(obj, testingExamples, labels, numFigure, fileName)
-            % TODO
+            % Plot the evolution error over the training iterations.
             figure(numFigure);
             error = zeros(length(obj.WeakClassifierArray),1);
             for i = 1:length(error)
