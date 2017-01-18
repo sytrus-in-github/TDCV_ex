@@ -10,10 +10,11 @@ classdef VJDetector
         function obj = VJDetector(imgfile, classifierfile, imgscale, base_scale)
             disp(imgscale)
             obj.classifiers = loadHaarLikeClassifiers(classifierfile);
-            intimg = double(imresize(rgb2gray(imread(imgfile)),imgscale));
-            intimg = cumsum(cumsum(intimg,1),2);
-            intimg = [zeros(size(intimg,1),1),intimg];
-            obj.intimg = [zeros(1,size(intimg,2));intimg];
+            %intimg = double(imresize(rgb2gray(imread(imgfile)),imgscale));
+            %intimg = cumsum(cumsum(intimg,1),2);
+            %intimg = [zeros(size(intimg,1),1),intimg];
+            %obj.intimg = [zeros(1,size(intimg,2));intimg];
+            obj.intimg = integralImage(imresize(rgb2gray(imread(imgfile)),imgscale));
             obj.baseScale=base_scale;
         end
         
@@ -84,8 +85,7 @@ classdef VJDetector
                         maxc = j;
                         maxleft = left;
                     end
-                    if left > right/2 % 2 not working ... 2.1 for faceC
-                        % disp([i, j, left right right/left])
+                    if left > right/2
                         ret{end+1}=[i, j];
                     end
                 end
