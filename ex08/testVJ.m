@@ -1,6 +1,15 @@
-vj = VJDetector('faceA.jpg', 'Classifiers.mat', 0.5, 19);
+scale = 0.4;
+imgFile = 'faceA.jpg';
+% scale = 1.2;
+% imgFile = 'faceB.jpg';
+% scale = 0.6;
+% imgFile = 'faceC.jpg';
+vj = VJDetector(imgFile, 'Classifiers.mat', scale, 19);
 faces = vj.findFaces();
 disp(faces);
+for i=1: length(faces)
+    markFace(imgFile, faces{i}, scale);
+end
 % A = [1 1 1 1;2 2 2 2;3 3 3 3;4 4 4 4]
 % intA = integral(A)
 % rect(intA,2,2,1,1)

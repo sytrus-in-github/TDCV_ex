@@ -8,6 +8,7 @@ classdef VJDetector
     
     methods
         function obj = VJDetector(imgfile, classifierfile, imgscale, base_scale)
+            disp(imgscale)
             obj.classifiers = loadHaarLikeClassifiers(classifierfile);
             intimg = double(imresize(rgb2gray(imread(imgfile)),imgscale));
             intimg = cumsum(cumsum(intimg,1),2);
@@ -56,6 +57,7 @@ classdef VJDetector
             nb2 = 50;
             ret = (t >= (cls.mean - abs(cls.mean - cls.minPos) * (cls.R - nb) / nb2) && ...
                    t <= (cls.mean + abs(cls.maxPos - cls.mean) * (cls.R - nb) / nb2));
+            % ret = ret*2-1;
                
 %             if (dr == 20||dr==22) && dc == 12 && ret==1
 %                 disp([i, dr, dc, ret (cls.mean - abs(cls.mean - cls.minPos) * (cls.R - 6) / 50) t (cls.mean + abs(cls.maxPos - cls.mean) * (cls.R - 6) / 50)])
@@ -64,6 +66,9 @@ classdef VJDetector
         
         function ret = findFaces(obj)
             [ir, ic] = size(obj.intimg);
+            maxr = 0;
+            maxc = 0;
+            maxleft = 0;
             ret = {};
             for i=1:ir-obj.baseScale
                 for j=1:ic-obj.baseScale
@@ -74,11 +79,21 @@ classdef VJDetector
                         left = left + obj.h(c,i,j) * cls.alpha;
                         right = right + cls.alpha;
                     end
-                    if left > right/2.5 % 2 not working ... 2.1 for faceC
-                        disp([i, j, left right right/left])
+                    if left>maxleft
+                        maxr = i;
+                        maxc = j;
+                        maxleft = left;
+                    end
+                    if left > right/2 % 2 not working ... 2.1 for faceC
+                        % disp([i, j, left right right/left])
                         ret{end+1}=[i, j];
                     end
                 end
+            end
+            if isempty(ret)
+                disp('The best available:')
+                disp([maxr maxc maxleft/right])
+                ret{end+1}= [maxr, maxc];
             end
         end
     end
