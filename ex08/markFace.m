@@ -5,4 +5,5 @@ function markFace(imgfile, pt, scale)
     imshow(img);
     hold on;
     rectangle('Position',[pt(2) pt(1) SQUARESIZE SQUARESIZE],'EdgeColor','r');
+    saveas(gcf,strcat('detected_',imgfile));
 end
