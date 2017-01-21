@@ -1,7 +1,20 @@
-ParameterVector = [1,1,100,1,1,100,100,100];
-ParameterVector = ParameterVector + 5000*ones(1,8);
-InputImage = zeros(10000);
+InputImage = imread('seq/im000.pgm');
+TemplatePos = [220, 200];
+TemplateSize = 100;
 NumOfGridPoints = 400;
 UpdateRange = 30;
-
-Intensity = RandomWarpingIntensity( InputImage, ParameterVector, NumOfGridPoints, UpdateRange );
+NumOfIterations = 500;
+% ParameterVector = zeros(1,8);
+% ParameterVector(1) = TemplatePos(1);
+% ParameterVector(2) = TemplatePos(2);
+% ParameterVector(3) = TemplatePos(1) + TemplateSize;
+% ParameterVector(4) = TemplatePos(2);
+% ParameterVector(5) = TemplatePos(1);
+% ParameterVector(6) = TemplatePos(2) + TemplateSize;
+% ParameterVector(7) = TemplatePos(1) + TemplateSize;
+% ParameterVector(8) = TemplatePos(2) + TemplateSize;
+% RandomWarpingIntensity( InputImage, ParameterVector, NumOfGridPoints, UpdateRange );
+tic;
+HyperplaneMatrix = ComputeHyperplaneMatrix( InputImage, TemplatePos, ...
+ TemplateSize, NumOfGridPoints, UpdateRange, NumOfIterations );
+toc;
