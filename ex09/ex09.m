@@ -18,3 +18,13 @@ tic;
 HyperplaneMatrix = ComputeHyperplaneMatrix( InputImage, TemplatePos, ...
  TemplateSize, NumOfGridPoints, UpdateRange, NumOfIterations );
 toc;
+
+UpdateRangeSerie = [30,27,24,21,18,15,12,9,6,3];
+UpdateMatrixSerie = zeros(8, NumOfGridPoints, length(UpdateRangeSerie));
+tic;
+for i = 1:length(UpdateRangeSerie)
+    UpdateMatrixSerie(:,:,i) = ComputeHyperplaneMatrix( InputImage, TemplatePos, ...
+ TemplateSize, NumOfGridPoints, UpdateRangeSerie(i), NumOfIterations );
+end
+toc;
+
