@@ -22,7 +22,8 @@ function [WarpingDisplacement, Intensity] = RandomWarpingIntensity( InputImage, 
     Var = var(Intensity);
     Intensity = (Intensity - Mean * ones(size(Intensity)))/Var;
 
-    Noise = unifrnd(0,1,length(Intensity),1);
+    Noise = wgn(length(Intensity),1,0);
+    disp(Noise);
     Intensity = Intensity + Noise;
 end
 
