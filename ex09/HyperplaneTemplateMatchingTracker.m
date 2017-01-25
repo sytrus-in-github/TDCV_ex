@@ -52,7 +52,7 @@ classdef HyperplaneTemplateMatchingTracker
             parameterList = zeros(length(cellsOfImageNames), 8);
             for i = 1:length(cellsOfImageNames)
                 img = imread(strcat(rootdir, cellsOfImageNames{i}));
-                parameterList(i, :) = obj.trackImg(img);
+                [obj, parameterList(i, :)] = obj.trackImg(img);
                 disp(strcat(cellsOfImageNames{i}, ' done.'))
             end
             disp(strcat('*** tracking done for: ', int2str(length(cellsOfImageNames)), ' images.'))
@@ -94,7 +94,7 @@ classdef HyperplaneTemplateMatchingTracker
         end
     end
     methods(Access=private)
-        function newParam = trackImg(obj, img)
+        function [obj, newParam] = trackImg(obj, img)
             for m = 1:obj.nbUpdateMatrix
                 A = obj.UpdateMatrixSerie(:,:,m);
                 for r = 1:obj.updateRepeat
