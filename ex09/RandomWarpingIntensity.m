@@ -4,10 +4,12 @@ function [WarpingDisplacement, Intensity] = RandomWarpingIntensity( InputImage, 
     WarpingDisplacement = round(unifrnd(-UpdateRange,UpdateRange,1,8));
     WarpedParameterVector = ParameterVector + WarpingDisplacement;
     OriginalGridPoints = ParamToGrid(ParameterVector, NumOfGridPoints);
-    OriginalRectangle = [ParameterVector(1:2:8)',ParameterVector(2:2:8)'];
-    WarpedRectangle = [WarpedParameterVector(1:2:8)',WarpedParameterVector(2:2:8)'];
-    BackWarp = estimateGeometricTransform(WarpedRectangle,OriginalRectangle,'projective');
-    BackWarpedGridPoints = round(transformPointsForward(BackWarp,OriginalGridPoints));
+%     OriginalRectangle = [ParameterVector(1:2:8)',ParameterVector(2:2:8)'];
+%     WarpedRectangle = [WarpedParameterVector(1:2:8)',WarpedParameterVector(2:2:8)'];
+%     BackWarp = estimateGeometricTransform(WarpedRectangle,OriginalRectangle,'projective');
+    BackWarp = getHomography(WarpedParameterVector, ParameterVector);
+%     BackWarpedGridPoints = round(transformPointsForward(BackWarp,OriginalGridPoints));
+    BackWarpedGridPoints = applyHomography2Grid(BackWarp, OriginalGridPoints);
     Intensity = zeros(length(BackWarpedGridPoints),1);
     [Height, Width] = size(InputImage);
     for i = 1:length(Intensity)
@@ -23,7 +25,7 @@ function [WarpingDisplacement, Intensity] = RandomWarpingIntensity( InputImage, 
     Intensity = (Intensity - Mean * ones(size(Intensity)))/Var;
 
     Noise = wgn(length(Intensity),1,0);
-    disp(Noise);
+    %disp(Noise);
     Intensity = Intensity + Noise;
 end
 
