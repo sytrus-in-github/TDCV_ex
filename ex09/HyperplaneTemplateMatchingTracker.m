@@ -107,11 +107,13 @@ classdef HyperplaneTemplateMatchingTracker
                     newI = WarpingIntensity( img, obj.currentParam, obj.nbGridPoints);
                     deltaI = newI - obj.templateI;
                     deltaP = A * deltaI;
-                    deltaParam = deltaP' + obj.originalParam; % we don't take obj.originalParam = 0 thus we need to add it
-                    updateH = getHomography(deltaParam, obj.originalParam); % back warp of deltaParam
-                    % update tracker status
-                    obj.currentH = obj.currentH * updateH.T; % w(P) <-w(P) o w(dP)^{-1}
-                    obj.currentParam = applyHomography2Param(projective2d(obj.currentH), obj.originalParam);
+%                     deltaParam = deltaP' + obj.originalParam; % we don't take obj.originalParam = 0 thus we need to add it
+%                     updateH = getHomography(deltaParam, obj.originalParam); % back warp of deltaParam
+%                     % update tracker status
+%                     obj.currentH = obj.currentH / updateH.T; % w(P) <-w(P) o w(dP)^{-1}
+%                     obj.currentParam = applyHomography2Param(projective2d(obj.currentH), obj.originalParam);
+                    obj.currentParam = obj.currentParam - deltaP';
+                    obj.currentH = getHomography(obj.originalParam, obj.currentParam);
                 end
             end
             newParam = obj.currentParam;
