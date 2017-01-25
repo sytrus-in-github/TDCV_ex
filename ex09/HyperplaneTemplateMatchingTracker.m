@@ -98,7 +98,7 @@ classdef HyperplaneTemplateMatchingTracker
             for m = 1:obj.nbUpdateMatrix
                 A = obj.UpdateMatrixSerie(:,:,m);
                 for r = 1:obj.updateRepeat
-                    newI = WarpingIntensity( img, obj.currentParam, obj.nbGridPoints);
+                    newI = WarpingIntensity(img, round(obj.currentParam), obj.nbGridPoints);
                     deltaI = newI - obj.templateI;
                     deltaP = A * deltaI;
                     deltaParam = deltaP' + obj.originalParam; % we don't take obj.originalParam = 0 thus we need to add it
