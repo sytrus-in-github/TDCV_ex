@@ -2,6 +2,7 @@ classdef HyperplaneTemplateMatchingTracker
     properties
         Template;
         templateI;
+        truncTemplate;
         UpdateMatrixSerie;
         nbUpdateMatrix;
         updateRepeat;
@@ -35,6 +36,13 @@ classdef HyperplaneTemplateMatchingTracker
             obj.currentParam = obj.originalParam; % copy
             obj.currentH = getHomography(obj.originalParam, obj.currentParam); % should be identity
             obj.currentH = obj.currentH.T; % keep only the matrix
+            % get trunc template
+            obj.truncTemplate = zeros(obj.originalParam(3)-obj.originalParam(1));
+            for u = 1:length(obj.truncTemplate)
+                for v = 1:length(obj.truncTemplate)
+                    obj.truncTemplate(u,v) = obj.Template(u+obj.originalParam(1)-1,v+obj.originalParam(2)-1);
+                end
+            end
             % get HyperplaneMatrices (A) of different ranges
             obj.UpdateMatrixSerie = zeros(8, NumOfGridPoints, length(UpdateRangeSerie));
             for i = 1:length(UpdateRangeSerie)
@@ -46,13 +54,17 @@ classdef HyperplaneTemplateMatchingTracker
             toc;
         end
         
-        function parameterList = trackImgSeq(obj, rootdir ,cellsOfImageNames)
+        function parameterList = trackImgSeq(obj, rootdir ,cellsOfImageNames, displayForEachStep)
             tic;
             disp('*** tracking ...')
             parameterList = zeros(length(cellsOfImageNames), 8);
             for i = 1:length(cellsOfImageNames)
                 img = imread(strcat(rootdir, cellsOfImageNames{i}));
-                [obj, parameterList(i, :)] = obj.trackImg(img);
+                [obj, newParam] = obj.trackImg(img);
+                parameterList(i, :) = newParam;
+                if displayForEachStep
+                    obj.drawTracking(img, newParam);
+                end
                 disp(strcat(cellsOfImageNames{i}, ' done.'))
             end
             disp(strcat('*** tracking done for: ', int2str(length(cellsOfImageNames)), ' images.'))
@@ -60,21 +72,15 @@ classdef HyperplaneTemplateMatchingTracker
         end
         
         function out = visualizeTracking(obj, rootdir, outputdir, cellsOfImageNames, parameterList)
-            disp('*** visualizing ...');
-            truncTemplate = zeros(obj.originalParam(3)-obj.originalParam(1));
-            for u = 1:length(truncTemplate)
-                for v = 1:length(truncTemplate)
-                    truncTemplate(u,v) = obj.Template(u+obj.originalParam(1)-1,v+obj.originalParam(2)-1);
-                end
-            end
-            originRef = imref2d(size(truncTemplate));
+            disp('*** visualizing ...')
+            originRef = imref2d(size(obj.truncTemplate));
             originRef.XWorldLimits = originRef.XWorldLimits + obj.originalParam(1)-1;
             originRef.YWorldLimits = originRef.YWorldLimits + obj.originalParam(2)-1;
             [Height, Width] = size(obj.Template);
             for i = 1:length(cellsOfImageNames)
                 img = imread(strcat(rootdir, cellsOfImageNames{i}));
                 H = getHomography(obj.originalParam, parameterList(i, :));
-                [W, R] = imwarp(truncTemplate,originRef,H);
+                [W, R] = imwarp(obj.truncTemplate,originRef,H);
                 offsetX = R.XWorldLimits(1);
                 offsetY = R.YWorldLimits(1);
                 output = img * 0.5;
@@ -109,6 +115,28 @@ classdef HyperplaneTemplateMatchingTracker
                 end
             end
             newParam = obj.currentParam;
+        end
+        
+        function [] = drawTracking(obj, img, parameter)
+            originRef = imref2d(size(obj.truncTemplate));
+            originRef.XWorldLimits = originRef.XWorldLimits + obj.originalParam(1)-1;
+            originRef.YWorldLimits = originRef.YWorldLimits + obj.originalParam(2)-1;
+            [Height, Width] = size(obj.Template);
+                H = getHomography(obj.originalParam, parameter);
+                [W, R] = imwarp(obj.truncTemplate,originRef,H);
+                offsetX = R.XWorldLimits(1);
+                offsetY = R.YWorldLimits(1);
+                output = img * 0.5;
+                [h,w] = size(W);
+                for u = 1:h
+                    for v = 1:w
+                        if (round(u+offsetX) > 0 && round(u+offsetX) <= Height...
+                                && round(v+offsetY) > 0 && round(v+offsetY) <= Width)
+                            output(round(u+offsetX),round(v+offsetY)) = output(round(u+offsetX),round(v+offsetY)) + 0.5 * W(u,v);
+                        end
+                    end
+                end
+                imshow(output);
         end
     end
 end

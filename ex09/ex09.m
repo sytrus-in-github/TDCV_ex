@@ -17,7 +17,7 @@ end
 
 tracker = HyperplaneTemplateMatchingTracker(templateFileName, TemplatePos, ...
     TemplateSize, NumOfGridPoints, UpdateRangeSerie, update_repeat, NumOfIterations);
-trackedParams = tracker.trackImgSeq(rootdir, imgfiles);
+trackedParams = tracker.trackImgSeq(rootdir, imgfiles, 1);
 %trackedParams
 tracker.visualizeTracking(rootdir, outputdir, imgfiles, trackedParams);
 
