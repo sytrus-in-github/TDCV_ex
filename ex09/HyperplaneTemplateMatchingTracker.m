@@ -58,6 +58,40 @@ classdef HyperplaneTemplateMatchingTracker
             disp(strcat('*** tracking done for: ', int2str(length(cellsOfImageNames)), ' images.'))
             toc;
         end
+        
+        function out = visualizeTracking(obj, rootdir, outputdir, cellsOfImageNames, parameterList)
+            disp('*** visualizing ...');
+            truncTemplate = zeros(obj.originalParam(3)-obj.originalParam(1));
+            for u = 1:length(truncTemplate)
+                for v = 1:length(truncTemplate)
+                    truncTemplate(u,v) = obj.Template(u+obj.originalParam(1)-1,v+obj.originalParam(2)-1);
+                end
+            end
+            originRef = imref2d(size(truncTemplate));
+            originRef.XWorldLimits = originRef.XWorldLimits + obj.originalParam(1)-1;
+            originRef.YWorldLimits = originRef.YWorldLimits + obj.originalParam(2)-1;
+            [Height, Width] = size(obj.Template);
+            for i = 1:length(cellsOfImageNames)
+                img = imread(strcat(rootdir, cellsOfImageNames{i}));
+                H = getHomography(obj.originalParam, parameterList(i, :));
+                [W, R] = imwarp(truncTemplate,originRef,H);
+                offsetX = R.XWorldLimits(1);
+                offsetY = R.YWorldLimits(1);
+                output = img * 0.5;
+                [h,w] = size(W);
+                for u = 1:h
+                    for v = 1:w
+                        if (round(u+offsetX) > 0 && round(u+offsetX) <= Height...
+                                && round(v+offsetY) > 0 && round(v+offsetY) <= Width)
+                            output(round(u+offsetX),round(v+offsetY)) = output(round(u+offsetX),round(v+offsetY)) + 0.5 * W(u,v);
+                        end
+                    end
+                end
+                imwrite(output,strcat(outputdir, cellsOfImageNames{i}));
+            end
+            disp(strcat('*** visualizing done for: ', int2str(length(cellsOfImageNames)), ' images.'))
+            out = 0;
+        end
     end
     methods(Access=private)
         function newParam = trackImg(obj, img)

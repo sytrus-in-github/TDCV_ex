@@ -7,6 +7,7 @@ update_repeat = 5;
 NumOfIterations = 500;
 
 rootdir = 'data/seq/';
+outputdir = 'data/output/';
 imgseq = dir(rootdir);
 imgfiles = cell(length(imgseq)-3,1);
 for i=1:length(imgseq)-3
@@ -17,7 +18,8 @@ end
 tracker = HyperplaneTemplateMatchingTracker(templateFileName, TemplatePos, ...
     TemplateSize, NumOfGridPoints, UpdateRangeSerie, update_repeat, NumOfIterations);
 trackedParams = tracker.trackImgSeq(rootdir, imgfiles);
-trackedParams
+%trackedParams
+tracker.visualizeTracking(rootdir, outputdir, imgfiles, trackedParams);
 
 % InputImage = imread('data/seq/im000.pgm');
 % UpdateRange = 30;
