@@ -4,7 +4,13 @@ function Intensity = WarpingIntensity( InputImage, ParameterVector, NumOfGridPoi
     GridPoints = ParamToGrid(ParameterVector, NumOfGridPoints);
     Intensity = zeros(length(GridPoints),1);
     for i = 1:length(Intensity)
+%         disp([GridPoints(i,1),GridPoints(i,2)])
+        try
         Intensity(i,1) = InputImage(GridPoints(i,1),GridPoints(i,2));
+        catch ME
+           disp([GridPoints(i,1),GridPoints(i,2)])
+           Intensity(i,1) = 0;
+        end
     end
     Mean = mean(Intensity);
     Var = var(Intensity);
