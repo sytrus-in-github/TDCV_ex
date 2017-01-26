@@ -9,7 +9,7 @@ function Intensity = WarpingIntensity( InputImage, ParameterVector, NumOfGridPoi
         Intensity(i,1) = InputImage(GridPoints(i,1),GridPoints(i,2));
         catch ME
            disp([GridPoints(i,1),GridPoints(i,2)])
-           Intensity(i,1) = 0;
+           rethrow(ME);
         end
     end
     Mean = mean(Intensity);
