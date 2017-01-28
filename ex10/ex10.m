@@ -1,8 +1,21 @@
 SEQ_DIR = 'data/sequence/';
-img = imread(strcat(SEQ_DIR,'2043_000140.jpeg'));
-bin = colorHist(img(300:345, 500:555,:));
-% imshow(img(307:348, 505:556,:));
-% length(bin)
-% max(bin)
-% min(bin)
-% bin'
+% get names of image sequences
+imgseq = dir(SEQ_DIR);
+imgfiles = cell(length(imgseq)-2,1);
+for i=1:length(imgseq)-2
+    imgfiles{i} = imgseq(i+2).name;
+end
+% show 1st imagename
+disp(imgfiles{1});
+% show selected region
+img = imread(strcat(SEQ_DIR,imgfiles{1}));
+figure(1);
+imshow(img(308:347, 506:555,:)); % INITIAL MANUAL RECTANGULAR REGION
+% show hue histogram
+bin = colorHist(img(308:347, 506:555,:));
+figure(2);
+showColorHist(bin);
+% show probability map
+dist = probMap(img(308:347, 506:555,:), bin);
+figure(3);
+showProbMap(dist);
