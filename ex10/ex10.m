@@ -8,14 +8,30 @@ end
 % show 1st imagename
 disp(imgfiles{1});
 % show selected region
+xReg = 308;
+yReg = 506;
+hReg = 39;
+wReg = 49;
 img = imread(strcat(SEQ_DIR,imgfiles{1}));
 figure(1);
-imshow(img(308:347, 506:555,:)); % INITIAL MANUAL RECTANGULAR REGION
+imshow(img(xReg:xReg+hReg, yReg:yReg+wReg,:)); % INITIAL MANUAL RECTANGULAR REGION
 % show hue histogram
-bin = colorHist(img(308:347, 506:555,:));
+bin = colorHist(img(xReg:xReg+hReg, yReg:yReg+wReg,:));
 figure(2);
 showColorHist(bin);
 % show probability map
-dist = probMap(img(308:347, 506:555,:), bin);
+dist = probMap(img(xReg:xReg+hReg, yReg:yReg+wReg,:), bin);
 figure(3);
 showProbMap(dist);
+
+% mean-shift tracking
+figure(4);
+showTracking(img,xReg,yReg,hReg,wReg);
+for i = 2:length(imgfiles)
+   pause(0.1);
+   img = imread(strcat(SEQ_DIR,imgfiles{i}));
+   imshow(img);
+   [xReg, yReg] = meanShift(img, xReg, yReg, hReg, wReg, bin);
+   figure(4);
+   showTracking(img,xReg,yReg,hReg,wReg);
+end
