@@ -28,7 +28,7 @@ showProbMap(dist);
 figure(4);
 showTracking(img,xReg,yReg,hReg,wReg);
 for i = 2:length(imgfiles)
-   pause(0.1);
+   pause(0.01);
    img = imread(strcat(SEQ_DIR,imgfiles{i}));
    imshow(img);
    [xReg, yReg] = meanShift(img, xReg, yReg, hReg, wReg, bin);
