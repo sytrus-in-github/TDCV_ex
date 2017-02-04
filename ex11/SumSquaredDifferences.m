@@ -10,5 +10,5 @@ function ssd = SumSquaredDifferences( image, template, x, y )
 %     ssd = ssd / (h*w);
     ssd = template - image(x : x+h-1, y : y+w-1);
     ssd = ssd .^ 2;
-    ssd = sum(ssd(:));
+    ssd = sum(ssd(:)) / (h*w);
 end
