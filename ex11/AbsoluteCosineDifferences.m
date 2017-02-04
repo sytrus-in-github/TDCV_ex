@@ -13,5 +13,4 @@ function acd = AbsoluteCosineDifferences(image, template, x, y, mask)
     end
     acd = abs(cos(acd));
     acd = sum(acd(:)) / support;
-    acd = 1 - acd;
 end

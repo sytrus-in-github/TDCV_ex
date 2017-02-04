@@ -1,4 +1,4 @@
-function ncc = NormalizedCrossCorrelation( image, template, x, y, mask)
+function ncc = NormalizedCrossCorrelation( image, template, x, y)
 %     sqNormT = 0; % we choose to compute the norm of the template each time
 %     sqNormI = 0;
 %     cc = 0;
@@ -11,18 +11,12 @@ function ncc = NormalizedCrossCorrelation( image, template, x, y, mask)
 %         end
 %     end
     imgpatch = image(x : x+h-1, y : y+w-1);
-    ncc = correlation(imgpatch, template, mask) / ...
-        sqrt(correlation(imgpatch, imgpatch, mask)*correlation(template, template, mask));
-    ncc = 1-ncc;
+    ncc = correlation(imgpatch, template) / ...
+        sqrt(correlation(imgpatch, imgpatch, mask)*correlation(template, template));
 end
 
-function c = correlation(img1, img2, mask)
+function c = correlation(img1, img2)
     mc = img1 .* img2;
-    if nargin == 3
-        mc = img1(mask) .* img2(mask);
-    else
-        mc = img1 .* img2;
-    end
     c = sum(mc(:));
 end
 
