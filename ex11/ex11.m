@@ -93,7 +93,7 @@ intermediateScales = [16;8;4;2];
 
 tic;
 disp('Compute: Color-NCC-PyramidalComputation-Map...');
-map = PyramidalMatchingResponseMap( image, template, intermediateScales, percentage, @NormalizedCrossCorrelation, @MatchingResponseMap );
+map = PyramidalMatchingResponseMap( image, template, intermediateScales, percentage, @NormalizedCrossCorrelation, @ColorMatchingResponseMap );
 toc;
 figure('Name','Color-NCC-PyramidalComputation-Map');
 map = mat2gray(map+min(map(map>0))*(map==0));

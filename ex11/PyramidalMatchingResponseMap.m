@@ -9,12 +9,11 @@ function map = PyramidalMatchingResponseMap( image, template, intermediateScales
        scaledTemplate = imresize(template, 1/scale);
        si = size(scaledImage);
        binaryMap = imresize(binaryMap, [si(1),si(2)]);
-       disp(size(binaryMap));
        scaledMap = matchingResponseFun( scaledImage, scaledTemplate, matchingFun, binaryMap );
        binaryMap = PercentileMatchingResponseMap( scaledMap, si, percentage );
     end
     binaryMap = imresize(binaryMap, [H, W]);
-    figure('Name','Binary map');
-    imshow(binaryMap);
+    %figure('Name','Binary map');
+    %imshow(binaryMap);
     map = matchingResponseFun( image, template, matchingFun, binaryMap );
 end
