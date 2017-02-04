@@ -1,7 +1,9 @@
 function map = ColorMatchingResponseMap( image, template, matchingFun, binaryMap )
-    mapR = MatchingResponseMap( image(:,:,1), template(:,:,1), matchingFun, binaryMap );
-    mapG = MatchingResponseMap( image(:,:,2), template(:,:,2), matchingFun, binaryMap );
-    mapB = MatchingResponseMap( image(:,:,3), template(:,:,3), matchingFun, binaryMap );
+    mapR = MatchingResponseMap( mat2gray(image(:,:,1)), mat2gray(template(:,:,1)), matchingFun, binaryMap );
+    mapG = MatchingResponseMap( mat2gray(image(:,:,2)), mat2gray(template(:,:,2)), matchingFun, binaryMap );
+    mapB = MatchingResponseMap( mat2gray(image(:,:,3)), mat2gray(template(:,:,3)), matchingFun, binaryMap );
     map = (mapR + mapG + mapB)/3;
+    figure(20);
+    imshow(map);
 end
 

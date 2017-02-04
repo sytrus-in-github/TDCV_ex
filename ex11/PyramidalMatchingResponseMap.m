@@ -1,4 +1,4 @@
-function map = PyramidalMatchingResponseMap( image, template, intermediateScales, threshold, matchingFun, matchingResponseFun )
+function map = PyramidalMatchingResponseMap( image, template, intermediateScales, percentage, matchingFun, matchingResponseFun )
     s = size(image);
     H = s(1);
     W = s(2);
@@ -7,14 +7,14 @@ function map = PyramidalMatchingResponseMap( image, template, intermediateScales
        scale = intermediateScales(i);
        scaledImage = imresize(image, 1/scale);
        scaledTemplate = imresize(template, 1/scale);
-       s = size(scaledImage);
-       h = s(1);
-       w = s(2);
-       binaryMap = imresize(binaryMap, [h, w]);
-       scaledMap = matchingResponseFun( scaledImage, scaledTemplate, @SumSquaredDifferences, binaryMap );
-       binaryMap = ThresholdMatchingResponseMap( scaledMap, threshold );
+       si = size(scaledImage);
+       binaryMap = imresize(binaryMap, [si(1),si(2)]);
+       disp(size(binaryMap));
+       scaledMap = matchingResponseFun( scaledImage, scaledTemplate, matchingFun, binaryMap );
+       binaryMap = PercentileMatchingResponseMap( scaledMap, si, percentage );
     end
     binaryMap = imresize(binaryMap, [H, W]);
+    figure('Name','Binary map');
     imshow(binaryMap);
     map = matchingResponseFun( image, template, matchingFun, binaryMap );
 end

@@ -10,5 +10,6 @@ function ssd = SumSquaredDifferences( image, template, x, y )
 %     ssd = ssd / (h*w);
     ssd = template - image(x : x+h-1, y : y+w-1);
     ssd = ssd .^ 2;
-    ssd = sum(ssd(:)) / (h*w);
+    ssd = 1 - sum(ssd(:)) / (h*w);
+    % we use 1 - sum squared difference to have a maximization problem
 end

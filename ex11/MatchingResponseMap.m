@@ -12,6 +12,6 @@ function map = MatchingResponseMap( image, template, matchingFun, binaryMap )
             end
         end
     end
-    map = map + (not(binaryMap(1:H-h,1:W-w))) * max(max(map,[],1),[],2);
+    %map = map + (not(binaryMap(1:H-h,1:W-w))) * min(min(map,[],1),[],2);
 end
 
