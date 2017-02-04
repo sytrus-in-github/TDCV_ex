@@ -24,15 +24,15 @@ intermediateScales = [16];
 % computation time : ~257 seconds
 % found template position : 200 250 (correct)
 
-% tic;
-% disp('Compute: Gray-SSD-DirectComputation-Map...');
-% map = MatchingResponseMap( grayImage, grayTemplate, @SumSquaredDifferences );
-% toc;
-% figure('Name','Gray-SSD-DirectComputation-Map');
-% map = mat2gray(map);
-% imshow(1-map);
-% disp('Found template position:');
-% disp(Argmin(map));
+tic;
+disp('Compute: Gray-SSD-DirectComputation-Map...');
+map = MatchingResponseMap( grayImage, grayTemplate, @SumSquaredDifferences );
+toc;
+figure('Name','Gray-SSD-DirectComputation-Map');
+map = mat2gray(map);
+imshow(1-map);
+disp('Found template position:');
+disp(Argmin(map));
 
 
 %% gray image pyramidal matching response with sum squared difference
