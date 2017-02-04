@@ -111,8 +111,9 @@ intermediateScales = [16;8;4;2];
 % j = 250;
 % disp(AbsoluteCosineDifferences(dir_i, dir_t, i, j, and(msk_t, msk_i(i:i+200, j:j+250))))
 % show gradient mask
-figure(3);
-imshow(255*msk_t);
+figure;
+[~,msk] = getGradientOrientation(image, 20);
+imshow(255*msk);
 
 tic;
 disp('Compute: Grad-ACD-PyramidalComputation-Map...');
