@@ -118,9 +118,9 @@ imshow(255*msk);
 tic;
 disp('Compute: Grad-ACD-PyramidalComputation-Map...');
 % this works much faster
-map = PyramidalMatchingResponseMap(image, template, intermediateScales, percentage, @AbsoluteCosineDifferences, @EdgeMatchingResponseMap);
+% map = PyramidalMatchingResponseMap(image, template, intermediateScales, percentage, @AbsoluteCosineDifferences, @EdgeMatchingResponseMap);
 % this works but slow
-% map = MatchingResponseMap(dir_i, dir_t, @SumSquaredDifferences,true(size(dir_i)),msk_i, msk_t);
+map = EdgeMatchingResponseMap(image, template, @AbsoluteCosineDifferences);
 toc;
 figure('Name','Grad-ACD-PyramidalComputation-Map');
 map = mat2gray(map);
