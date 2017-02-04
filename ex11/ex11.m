@@ -89,7 +89,7 @@ intermediateScales = [16;8;4;2];
 % disp('Found template position:');
 % disp(Argmax(map));
 
-%% gray image pyramidal matching response with normalized cross correlation
+%% color image pyramidal matching response with normalized cross correlation
 
 tic;
 disp('Compute: Color-NCC-PyramidalComputation-Map...');
