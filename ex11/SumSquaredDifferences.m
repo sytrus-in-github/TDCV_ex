@@ -1,4 +1,4 @@
-function ssd = SumSquaredDifferences( image, template, x, y )
+function ssd = SumSquaredDifferences( image, template, x, y, mask)
 %     ssd = 0;
     [h, w] = size(template);
 %     for i = 1:h
@@ -9,6 +9,12 @@ function ssd = SumSquaredDifferences( image, template, x, y )
 %     end
 %     ssd = ssd / (h*w);
     ssd = template - image(x : x+h-1, y : y+w-1);
+    if nargin == 5
+        ssd = ssd(mask);
+        support = sum(mask(:));
+    else
+        support = h * w;
+    end
     ssd = ssd .^ 2;
-    ssd = sum(ssd(:)) / (h*w);
+    ssd = sum(ssd(:)) / support;
 end
