@@ -66,15 +66,15 @@ intermediateScales = [16;8;4;2];
 
 %% gray image pyramidal matching response with normalized cross correlation
 
-% tic;
-% disp('Compute: Gray-NCC-PyramidalComputation-Map...');
-% map = PyramidalMatchingResponseMap( grayImage, grayTemplate, intermediateScales, percentage, @NormalizedCrossCorrelation, @MatchingResponseMap );
-% toc;
-% figure('Name','Gray-NCC-PyramidalComputation-Map');
-% map = mat2gray(map+min(map(map>0))*(map==0));
-% imshow(map);
-% disp('Found template position:');
-% disp(Argmax(map));
+tic;
+disp('Compute: Gray-NCC-PyramidalComputation-Map...');
+map = PyramidalMatchingResponseMap( grayImage, grayTemplate, intermediateScales, percentage, @NormalizedCrossCorrelation, @MatchingResponseMap );
+toc;
+figure('Name','Gray-NCC-PyramidalComputation-Map');
+map = mat2gray(map+min(map(map>0))*(map==0));
+imshow(map);
+disp('Found template position:');
+disp(Argmax(map));
 
 %% color image pyramidal matching response with sum squared difference
 
@@ -102,28 +102,23 @@ intermediateScales = [16;8;4;2];
 % disp(Argmax(map));
 
 %% edge-based template matching
+% 
+% % show gradient mask
+% figure;
+% [~,msk] = getGradientOrientation(image, 20);
+% imshow(255*msk);
+% 
+% tic;
+% disp('Compute: Grad-ACD-PyramidalComputation-Map...');
+% % this works much faster
+% % map = PyramidalMatchingResponseMap(image, template, intermediateScales, percentage, @AbsoluteCosineDifferences, @EdgeMatchingResponseMap);
+% % this works but slow
+% map = EdgeMatchingResponseMap(image, template, @AbsoluteCosineDifferences);
+% toc;
+% figure('Name','Grad-ACD-PyramidalComputation-Map');
+% map = mat2gray(map);
+% imshow(map);
+% disp('Found template position:');
+% disp(Argmax(map));
+% % imwrite(map,'Grad-ACD-Map.png');
 
-% intermediateScales = [16;8];
-% val_threshold = 0.15;
-
-
-% i = 200;
-% j = 250;
-% disp(AbsoluteCosineDifferences(dir_i, dir_t, i, j, and(msk_t, msk_i(i:i+200, j:j+250))))
-% show gradient mask
-figure;
-[~,msk] = getGradientOrientation(image, 20);
-imshow(255*msk);
-
-tic;
-disp('Compute: Grad-ACD-PyramidalComputation-Map...');
-% this works much faster
-% map = PyramidalMatchingResponseMap(image, template, intermediateScales, percentage, @AbsoluteCosineDifferences, @EdgeMatchingResponseMap);
-% this works but slow
-map = EdgeMatchingResponseMap(image, template, @AbsoluteCosineDifferences);
-toc;
-figure('Name','Grad-ACD-PyramidalComputation-Map');
-map = mat2gray(map);
-imshow(1-map);
-disp('Found template position:');
-disp(Argmax(map));

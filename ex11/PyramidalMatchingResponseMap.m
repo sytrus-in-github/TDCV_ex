@@ -10,12 +10,11 @@ function map = PyramidalMatchingResponseMap( image, template, intermediateScales
        s = size(scaledImage);
        binaryMap = imresize(binaryMap, [s(1),s(2)],'nearest');
        scaledMap = matchingResponseFun( scaledImage, scaledTemplate, matchingFun, binaryMap);
-%        binaryMap = ThresholdMatchingResponseMap( scaledMap, threshold );
        binaryMap = PercentileMatchingResponseMap( scaledMap, s, percentage );
     end
     binaryMap = imresize(binaryMap, [H, W],'nearest');
-    disp([max(binaryMap(:)) mean(binaryMap(:)) min(binaryMap(:))])
-    figure('Name','BinaryMap');
-    imshow(binaryMap);
+%    disp([max(binaryMap(:)) mean(binaryMap(:)) min(binaryMap(:))])
+%     figure('Name','BinaryMap');
+%     imshow(binaryMap);
     map = matchingResponseFun( image, template, matchingFun, binaryMap );
 end

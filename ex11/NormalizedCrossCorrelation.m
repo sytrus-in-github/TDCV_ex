@@ -12,7 +12,7 @@ function ncc = NormalizedCrossCorrelation( image, template, x, y)
 %     end
     imgpatch = image(x : x+h-1, y : y+w-1);
     ncc = correlation(imgpatch, template) / ...
-        sqrt(correlation(imgpatch, imgpatch, mask)*correlation(template, template));
+        sqrt(correlation(imgpatch, imgpatch)*correlation(template, template));
 end
 
 function c = correlation(img1, img2)
